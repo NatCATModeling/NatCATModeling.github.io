@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Nat CAT Modeling is a web site that aims to provide free natural catastrophe data and  information, as well as to promote a safe, resilient and sustainable built environemnt. It provides asscess to and visualize the seismic hazard and relevant data from publicly available infomation such as earthquake faults, liquefaction, soil infomation, and landslides.">
+    <meta name="author" content="Liang Chang, PhD, CCRA">
+    <meta name="keywords" content="Catastrophe, risk, hazard, San Francisco, Bay Area, Los Angeles, California, earthquake, seismic, hazard, risk, damage, liquefaction, landslide, fault, vulnerability, distance to fault, fault lines, rupture, USGS, Department of Insurance, Earthquake insurance, Earthquake insurance coverage">
+    <title>California Earthquake Faults and Liquefaction Maps</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
+    <!-- Google Analytics -->
+    <script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-74059986-1', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <!-- End Google Analytics -->
+</head>
+
+<style>
+.help-tip {
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 12px;
+    cursor: default;
+}
+
+#Fault {
+    position: absolute;
+    top: 8%;
+    left: 53%;
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 12px;
+    cursor: default;
+}
+
+#LiveEQ {
+    position: absolute;
+    top: 32%;
+    left:51%;
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 12px;
+    cursor: default;
+}
+
+#Lique {
+    position: absolute;
+    bottom: 34%;
+    left: 82%;
+    text-align: center;
+    background-color: #BCDBEA;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    font-size: 12px;
+    line-height: 12px;
+    cursor: default;
+}
+
+.help-tip:before {
+    content: '?';
+    font-weight: bold;
+    color: #fff;
+}
+
+.help-tip:hover p {
+    display: block;
+    transform-origin: 100% 0% ;
+    -webkit-animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
+    visibility: visible;
+    z-index: 9;
+}
+
+.help-tip p {
+    display: none;
+    visibility: hidden;
+    text-align: left;
+    background-color: #1E2021 ;        
+    padding: 10px;
+    width: 300px;
+    position: relative;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
+    left: -4px;
+    color: #FFF;
+    font-size: 11px;
+    font-family: verdana;   
+    line-height: 1.4;
+}
+
+.help-tip p:before {
+    position: relative;
+    content: '';
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+    border-bottom-color: #1E2021;
+    left: 40px;
+    bottom: -40px;
+
+}
+
+.help-tip p:after {
+    width: 100%;
+    height: 40px;
+    content: '';
+    position: relative;
+    top: 0px;
+    left: 40px;
+    
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    100% {
+        opacity: 100%;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+</style>
+
+
+<style>
+    #features {
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    overflow: visible;
+    font-size: 12px;
+    font-family: verdana;
+    color: black;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+</style>
+
+<body>
+    <style>
+    .legend label,
+    .legend span {
+        display: block;
+        float: left;
+        height: 13px;
+        width: 20%;
+        text-align: center;
+        font: 10px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
+        color: #808080;
+    }
+    
+    #legend {
+        position: absolute;
+        top: 55%;
+        left: 5%;
+        width: 25%;
+        z-index: 1;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 10px;
+    }
+    </style>
+
+    <style>
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    ul span#one {
+        align: left;
+        vertical-align: middle;
+        font-size: 220%;
+        color: #F276E4;
+        opacity: 0.9;
+    }
+    
+    ul span#two {
+        align: left;
+        vertical-align: middle;
+        font-size: 10%;
+        color: red;
+        opacity: 0.9;
+    }
+    
+    ul span#rwo {
+        align: left;
+        vertical-align: middle;
+        width: 18%;
+        font-size: 1%;
+        height: 4px;
+        border: none;
+        border-top: 4px solid red;
+        margin: 2;
+        padding: 0;
+        opacity: 0.9;
+    }
+    
+    
+    </style>
+    <!-- Set the display of this container to none so we can
+     add it programmatically to `legendControl` -->
+    <div id="legend" style="display:table;">
+        <ul><span id="rwo"><span style="width:70px;background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
+                 <div id="Fault" class="help-tip">
+                 <p style="color:#a9a9a9; "> The linewidth of the fault traces is proportional to the amount of slip‐rate along the corresponding fault. Faults data from the Quaternary Fault and Fold Database of the United States. Source: <a href="http://earthquake.usgs.gov/hazards/qfaults/">USGS</a></p></div>
+        </ul>
+        <ul><span id="one">●</span><strong>M2.5+ Events</strong>
+        <div id="LiveEQ" class="help-tip">
+            <p style="color:#a9a9a9; ">Circle size indicates magnitude of earthquake. Include all M2.5+ events occured within the past 30 days. Click to view more details. Data refreshs every 15 minutes. Source: <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a></p></div>
+        </ul>
+        <strong>Liquefaction Susceptibility</strong>
+                  <div id="Lique" class="help-tip"><p style="color:#a9a9a9; ">Liquefaction susceptibility data only available in the San Fracisco Bay Area. Zoom in to view details. Source: <a href="http://geomaps.wr.usgs.gov/sfgeo/liquefaction/susceptibility.html">USGS</a></p></div>
+
+        <nav class="legend clearfix">
+            <span style="background:#FE0000;opacity:0.9;"></span>
+            <span style="background:#FFAA01;opacity:0.9;"></span>
+            <span style="background:#FFFF01;opacity:0.9;"></span>
+            <span style="background:#96CD18;opacity:0.9;"></span>
+            <span style="background:#F2F2F2;opacity:0.9;"></span>
+            <label>Very High</label>
+            <label>High</label>
+            <label>Moderate</label>
+            <label>Low</label>
+            <label>Very Low</label>
+            
+        </nav>
+    </div>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.css" type="text/css" />
+    <style>
+    #geocoder-container {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        margin-top: 15px;
+    }
+    
+    #geocoder-container > div {
+        min-width: 30%;
+        margin-left: 25%;
+    }
+    </style>
+    <div id="map"></div>
+    <pre id="features"></pre>
+    <div id="geocoder-container"></div>
+    <script>
+    mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2dHMza3FmN3VhdnNveCJ9.cq75mgWIzoAaesbmdR6T6Q";
+
+
+    if (!mapboxgl.supported()) {
+        alert("Your browser does not support Mapbox GL. Please try a different browser, e.g., Google Chrome or Firefox.");
+    } else {
+
+        // Set map bounda to North America only.
+        var bounds = [
+            [-175, 25], // Southwest coordinates
+            [-20, 70] // Northeast coordinates
+        ];
+
+        var map = new mapboxgl.Map({
+            container: "map", // container id
+            style: "mapbox://styles/natcatmodeling/cikzty5hm00399cm7wi86v56s", //stylesheet location
+            center: [-122.419, 37.7749], // starting position
+            zoom: 10, // starting zoom
+            maxBounds: bounds // Sets bounds as max
+        });
+    }
+
+
+    function showLocation(position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        map.setCenter([longitude, latitude]);
+    }
+
+    function errorHandler(err) {
+        if (err.code == 1) {
+            alert("Error: Request to get location is denied!");
+        } else if (err.code == 2) {
+            alert("Error: Position is unavailable!");
+        }
+    }
+
+    function getLocation() {
+
+        if (navigator.geolocation) {
+            // timeout at 60000 milliseconds (60 seconds)
+            var options = {
+                timeout: 60000
+            };
+            navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
+        } else {
+            alert("Sorry, browser does not support geolocation!");
+        }
+    }
+
+
+    // Add zoom and geo-location, and geocoder controls to the map
+    var geocoder = new mapboxgl.Geocoder({
+        position: "top-left",
+        country: "us",
+        placeholder: "Find an address, ZIP, or Place",
+        container: "geocoder-container"
+    });
+
+    map.addControl(geocoder);
+
+
+    map.addControl(new mapboxgl.Navigation({position: "top-left"}));
+
+    var geoLocator = new mapboxgl.Geolocate({
+        position: "top-left"
+    });
+
+    map.addControl(geoLocator);
+
+    var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false
+    });
+
+    //define USGS data feed source
+    var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson";
+    var source = new mapboxgl.GeoJSONSource({
+        data: url
+    });
+
+
+    window.setInterval(function() {
+        source.setData(url);
+    }, 900);
+
+    // After the map style has loaded on the page, add a source layer and default
+    // styling for a single point.
+    map.on("style.load", function() {
+
+        getLocation();
+
+        map.addSource("markers", {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [],
+                "properties": {
+                    "title": "Address",
+                    "marker-symbol": "star-15",
+                    "marker-size": "large",
+                    "marker-color": "#0000FF"
+                }
+            }
+        });
+
+        map.addLayer({
+            "id": "point",
+            "type": "symbol",
+            "source": "markers",
+            // "paint": {
+            //        "circle-radius": 12,
+            //        "circle-color": "#0000FF"
+            //    } ,   
+            "layout": {
+                "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
+                "icon-size": 1.5,
+                "text-field": "Searched Location",
+                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                "text-offset": [0, 1.6],
+                "text-anchor": "top"
+            }
+        });
+
+        // Listen for the `result` event that is triggered when a user
+        // makes a selection and add a marker that matches the result.
+        geocoder.on("result", function(ev) {
+            map.getSource("markers").setData(ev.result.geometry);
+        });
+
+
+        //add live EQ data
+        map.addSource("USGSLiveEvnt", source);
+        var mags = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        for (var i = 0; i < mags.length; i++) {
+            var mag = mags[i];
+            map.addLayer({
+                "id": "quakes-" + mag,
+                "interactive": true,
+                "type": "circle",
+                "source": "USGSLiveEvnt",
+                "filter": ["all", [">=", "mag", mag],
+                    ["<", "mag", mag + 1]
+                ],
+                "paint": {
+                    "circle-radius": Math.pow(mag, 2.6),
+                    "circle-color": "#F276E4",
+                    "circle-opacity": 0.9
+                }
+            });
+        }
+
+        // add custom source from mapbox [use unique MapID]
+        map.addSource("mySource", {
+            type: "vector",
+            url: "mapbox://natcatmodeling.5nvu1zch" //uploaded Shapefile for USGS faults
+        });
+
+        // Add a layer to the map"s style. Here, we reference the source we created above and make sure to point to the layer we want within that source"s
+
+        // map.addLayer({
+        //     "id": "USGSfaults",
+        //     "type": "line",
+        //     "source": "mySource",
+        //     "source-layer": "sectionsall",
+        //     "layout": {
+        //         "line-join": "round",
+        //         "line-cap": "round"
+        //     },
+        //     "paint": {
+        //         "line-color": "red",
+        //         "line-width": 2
+        //     }
+        // });  
+        map.addLayer({
+            "id": "USGSfaults-1",
+            "type": "line",
+            "source": "mySource",
+            "source-layer": "sectionsall",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#FF0000",
+                "line-width": 2.5
+            },
+            "filter": ["==", "slipcode", 1]
+        });
+
+        map.addLayer({
+            "id": "USGSfaults-2",
+            "type": "line",
+            "source": "mySource",
+            "source-layer": "sectionsall",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#FF0000",
+                "line-width": 1.5
+            },
+            "filter": ["==", "slipcode", 2]
+        });
+
+        map.addLayer({
+            "id": "USGSfaults-3",
+            "type": "line",
+            "source": "mySource",
+            "source-layer": "sectionsall",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#FF0000",
+                "line-width": 0.8
+            },
+            "filter": ["==", "slipcode", 3]
+        });
+
+        map.addLayer({
+            "id": "USGSfaults-4",
+            "type": "line",
+            "source": "mySource",
+            "source-layer": "sectionsall",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "#FF0000",
+                "line-width": 0.6
+            },
+            "filter": ["==", "slipcode", 4]
+        });
+
+
+        // add the filtered layer for highlighed segment
+        map.addLayer({
+            "id": "USGSfaults-hover",
+            "type": "line",
+            "source": "mySource",
+            "source-layer": "sectionsall",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
+            "paint": {
+                "line-color": "blue",
+                "line-width": 2.8
+            },
+            "filter": ["==", "name", ""]
+        });
+
+    });
+
+    map.on("click", function(e) {
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        });
+
+        if (!features.length) {
+            return;
+        }
+
+        var feature = features[0];
+
+        var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: true
+            })
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML("<a href = '" + feature.properties.url + "'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a>")
+            .addTo(map);
+    });
+
+
+    map.on("mousemove", function(e) {
+
+        // show mouse name in the Text Box
+        document.getElementById("features").innerHTML = JSON.stringify("Longitude:" + Math.round(e.lngLat.lng*10000)/10000 + ", Latitude:" + Math.round(e.lngLat.lat*10000)/10000 );
+
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        });
+        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
+
+        // fault line name popup
+        features = map.queryRenderedFeatures(e.point, {
+            layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
+        });
+
+        if (features.length) {
+            // Populate the popup and set its coordinates based on the feature found.
+            popup.setLngLat(e.lngLat)
+                //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
+                .setHTML(features[0].properties.name)
+                .addTo(map);
+
+
+            // hightlighted fault segment
+
+            map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
+        } else {
+            map.setFilter("USGSfaults-hover", ["==", "name", ""]);
+        }
+
+    });
+    </script>
+</body>
+
+</html>
