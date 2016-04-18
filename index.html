@@ -567,7 +567,7 @@
         addLayer('Medium Liquefaction Susceptibility', 'liqueM');
         addLayer('Low Liquefaction Susceptibility', 'liqueL');
         addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
-        
+
         getLocation();
 
         map.addSource("markers", {
@@ -755,7 +755,7 @@
                 closeOnClick: true
             })
             .setLngLat(feature.geometry.coordinates)
-            .setHTML("<a href = '" + feature.properties.url + "'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a>")
+            .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
             .addTo(map);
     });
 
@@ -779,7 +779,7 @@
             // Populate the popup and set its coordinates based on the feature found.
             popup.setLngLat(e.lngLat)
                 //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
-                .setHTML(features[0].properties.name)
+                .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + features[0].properties.name + "</span>")
                 .addTo(map);
 
 
