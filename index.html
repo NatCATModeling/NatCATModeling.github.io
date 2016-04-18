@@ -481,7 +481,93 @@
     // After the map style has loaded on the page, add a source layer and default
     // styling for a single point.
     map.on("style.load", function() {
+          // add teh soil liquefaction layers
+        map.addSource('liquefaction', {
+            type: 'vector',
+            url: 'mapbox://natcatmodeling.20u13bk5'
+        });
+        map.addLayer({
+            'id': 'liqueVH',
+            'type': 'fill',
+            'source': 'liquefaction',
+            'source-layer': "bayarea_liqsus_vh",
+            'layout': {
+                'visibility': 'visible'
+            },
+            'paint': {
+                'fill-color': '#7a0177',
+                'fill-opacity': 0.8
+            },
+            "filter": ["==", "LIQ", "VH"]
+        });
 
+        map.addLayer({
+            'id': 'liqueH',
+            'type': 'fill',
+            'source': 'liquefaction',
+            'source-layer': "bayarea_liqsus_vh",
+            'layout': {
+                'visibility': 'visible'
+            },
+            'paint': {
+                'fill-color': '#c51b8a',
+                'fill-opacity': 0.8
+            },
+            "filter": ["==", "LIQ", "H"]
+        });
+
+        map.addLayer({
+            'id': 'liqueM',
+            'type': 'fill',
+            'source': 'liquefaction',
+            'source-layer': "bayarea_liqsus_vh",
+            'layout': {
+                'visibility': 'visible'
+            },
+            'paint': {
+                'fill-color': '#f768a1',
+                'fill-opacity': 0.8
+            },
+            "filter": ["==", "LIQ", "M"]
+        });
+
+        map.addLayer({
+            'id': 'liqueL',
+            'type': 'fill',
+            'source': 'liquefaction',
+            'source-layer': "bayarea_liqsus_vh",
+            'layout': {
+                'visibility': 'visible'
+            },
+            'paint': {
+                'fill-color': '#fbb4b9',
+                'fill-opacity': 0.8
+            },
+            "filter": ["==", "LIQ", "L"]
+        });
+
+        map.addLayer({
+            'id': 'liqueVL',
+            'type': 'fill',
+            'source': 'liquefaction',
+            'source-layer': "bayarea_liqsus_vh",
+            'layout': {
+                'visibility': 'visible'
+            },
+            'paint': {
+                'fill-color': '#feebe2',
+                'fill-opacity': 0.8
+            },
+            "filter": ["==", "LIQ", "VL"]
+        });
+
+
+        addLayer('Very High Liquefaction Susceptibility', 'liqueVH');
+        addLayer('High Liquefaction Susceptibility', 'liqueH');
+        addLayer('Medium Liquefaction Susceptibility', 'liqueM');
+        addLayer('Low Liquefaction Susceptibility', 'liqueL');
+        addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
+        
         getLocation();
 
         map.addSource("markers", {
@@ -649,92 +735,7 @@
         });
 
 
-        // add teh soil liquefaction layers
-        map.addSource('liquefaction', {
-            type: 'vector',
-            url: 'mapbox://natcatmodeling.20u13bk5'
-        });
-        map.addLayer({
-            'id': 'liqueVH',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#7a0177',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "VH"]
-        });
-
-        map.addLayer({
-            'id': 'liqueH',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#c51b8a',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "H"]
-        });
-
-        map.addLayer({
-            'id': 'liqueM',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#f768a1',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "M"]
-        });
-
-        map.addLayer({
-            'id': 'liqueL',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#fbb4b9',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "L"]
-        });
-
-        map.addLayer({
-            'id': 'liqueVL',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#feebe2',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "VL"]
-        });
-
-
-        addLayer('Very High Liquefaction Susceptibility', 'liqueVH');
-        addLayer('High Liquefaction Susceptibility', 'liqueH');
-        addLayer('Medium Liquefaction Susceptibility', 'liqueM');
-        addLayer('Low Liquefaction Susceptibility', 'liqueL');
-        addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
+      
 
     });
 
