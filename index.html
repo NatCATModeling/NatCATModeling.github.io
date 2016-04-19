@@ -460,9 +460,11 @@
     var geocoder = new mapboxgl.Geocoder({
         position: "top-left",
         country: "us",
-        type: "region ,  postcode ,  place , locality ,  neighborhood ,  address , poi",
+        type: "postcode,address,region,place,locality,neighborhood,poi",
         placeholder: "Find an address, ZIP, or Place",
-        container: "geocoder-container"
+        container: "geocoder-container",
+        autocomplete: "true",
+        proximity: [-119.4179,36.7783]
     });
 
     map.addControl(geocoder);
