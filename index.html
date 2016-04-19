@@ -388,18 +388,20 @@
     function showLocation(position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-        map.setCenter([longitude, latitude]);
+        //map.setCenter([longitude, latitude]);
 
-        //map.getSource("markers").setData(ev.result.geometry);
-
-        map.getSource("markers").setData({
-            "features": [{
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [-77.03238901390978, 38.913188059745586]
-                }
-            }]
-        });
+        map.getSource("markers").setData(
+            {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [longitude, latitude]
+                    }
+                }]
+            }
+        );
     }
 
     function errorHandler(err) {
