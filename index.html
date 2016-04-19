@@ -418,7 +418,7 @@
     function addLayer(name, id) {
         var link = document.createElement('a');
         link.href = '#';
-        link.className = 'active';
+        link.className = '';
         link.textContent = name;
 
         link.onclick = function(e) {
@@ -427,7 +427,7 @@
 
             var visibility = map.getLayoutProperty(id, 'visibility');
 
-            if (visibility === 'visible') {
+            if (visibility == 'visible') {
                 map.setLayoutProperty(id, 'visibility', 'none');
                 this.className = '';
             } else {
@@ -561,6 +561,11 @@
             "filter": ["==", "LIQ", "VL"]
         });
 
+        map.setLayoutProperty("liqueVL", 'visibility', 'none');
+        map.setLayoutProperty("liqueL", 'visibility', 'none');
+        map.setLayoutProperty("liqueM", 'visibility', 'none');
+        map.setLayoutProperty("liqueH", 'visibility', 'none');
+        map.setLayoutProperty("liqueVH", 'visibility', 'none');
 
         addLayer('Very High Liquefaction Susceptibility', 'liqueVH');
         addLayer('High Liquefaction Susceptibility', 'liqueH');
