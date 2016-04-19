@@ -389,7 +389,7 @@
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
         map.setCenter([longitude, latitude]);
-
+        map.setZoom(12);l
         // add marker
         map.getSource("markers").setData(
             {
@@ -405,7 +405,7 @@
         );
 
         //change marker text
-        map.setLayoutProperty("point", "text-field", "You are here.");
+        //map.setLayoutProperty("point", "text-field", "You are here.");
     }
 
     function errorHandler(err) {
