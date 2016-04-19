@@ -27,8 +27,6 @@
         width: 100%;
     }
     </style>
-
-
     <!-- Heap Analytics -->
     <script type="text/javascript">
     window.heap = window.heap || [], heap.load = function(e, t) {
@@ -391,6 +389,17 @@
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
         map.setCenter([longitude, latitude]);
+
+        //map.getSource("markers").setData(ev.result.geometry);
+
+        map.getSource("markers").setData({
+            "features": [{
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [-77.03238901390978, 38.913188059745586]
+                }
+            }]
+        });
     }
 
     function errorHandler(err) {
@@ -410,7 +419,7 @@
             };
             navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
         } else {
-            alert("Sorry, browser does not support geolocation!");
+            alert("Sorry, browser does not support geo-location!");
         }
     }
 
@@ -481,7 +490,7 @@
     // After the map style has loaded on the page, add a source layer and default
     // styling for a single point.
     map.on("style.load", function() {
-          // add teh soil liquefaction layers
+        // add teh soil liquefaction layers
         map.addSource('liquefaction', {
             type: 'vector',
             url: 'mapbox://natcatmodeling.20u13bk5'
@@ -561,6 +570,7 @@
             "filter": ["==", "LIQ", "VL"]
         });
 
+        //set initial visibility
         map.setLayoutProperty("liqueVL", 'visibility', 'none');
         map.setLayoutProperty("liqueL", 'visibility', 'none');
         map.setLayoutProperty("liqueM", 'visibility', 'none');
@@ -573,6 +583,7 @@
         addLayer('Low Liquefaction Susceptibility', 'liqueL');
         addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
 
+        // find current location
         getLocation();
 
         map.addSource("markers", {
@@ -740,7 +751,7 @@
         });
 
 
-      
+
 
     });
 
