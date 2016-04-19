@@ -590,43 +590,7 @@
         addLayer('Low Liquefaction Susceptibility', 'liqueL');
         addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
 
-        // find current location
-        getLocation();
-
-        map.addSource("markers", {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [],
-                "properties": {
-                    "title": "Address",
-                    "marker-symbol": "star-15",
-                    "marker-size": "large",
-                    "marker-color": "#0000FF"
-                }
-            }
-        });
-
-        map.addLayer({
-            "id": "point",
-            "type": "symbol",
-            "source": "markers",
-            "layout": {
-                "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
-                "icon-size": 1.5,
-                "text-field": "Searched Location",
-                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-                "text-offset": [0, 1.6],
-                "text-anchor": "top"
-            }
-        });
-
-        // Listen for the `result` event that is triggered when a user
-        // makes a selection and add a marker that matches the result.
-        geocoder.on("result", function(ev) {
-            map.getSource("markers").setData(ev.result.geometry);
-        });
-
+        
 
         //add live EQ data
         map.addSource("USGSLiveEvnt", source);
@@ -753,6 +717,42 @@
             "filter": ["==", "name", ""]
         });
 
+// find current location
+        getLocation();
+
+        map.addSource("markers", {
+            "type": "geojson",
+            "data": {
+                "type": "FeatureCollection",
+                "features": [],
+                "properties": {
+                    "title": "Address",
+                    "marker-symbol": "star-15",
+                    "marker-size": "large",
+                    "marker-color": "#0000FF"
+                }
+            }
+        });
+
+        map.addLayer({
+            "id": "point",
+            "type": "symbol",
+            "source": "markers",
+            "layout": {
+                "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
+                "icon-size": 1.5,
+                "text-field": "Searched Location",
+                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+                "text-offset": [0, 1.6],
+                "text-anchor": "top"
+            }
+        });
+
+        // Listen for the `result` event that is triggered when a user
+        // makes a selection and add a marker that matches the result.
+        geocoder.on("result", function(ev) {
+            map.getSource("markers").setData(ev.result.geometry);
+        });
 
 
 
