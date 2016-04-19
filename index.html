@@ -388,7 +388,7 @@
     function showLocation(position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-        //map.setCenter([longitude, latitude]);
+        map.setCenter([longitude, latitude]);
 
         map.getSource("markers").setData(
             {
