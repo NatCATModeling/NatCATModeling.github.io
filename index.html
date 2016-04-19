@@ -390,6 +390,7 @@
         var longitude = position.coords.longitude;
         map.setCenter([longitude, latitude]);
 
+        // add marker
         map.getSource("markers").setData(
             {
                 "type": "FeatureCollection",
@@ -403,7 +404,8 @@
             }
         );
 
-        setLayoutProperty("point", "text-field", "You are here.");
+        //change marker text
+        map.setLayoutProperty("point", "text-field", "You are here.");
     }
 
     function errorHandler(err) {
