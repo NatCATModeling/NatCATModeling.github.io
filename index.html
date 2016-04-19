@@ -402,6 +402,8 @@
                 }]
             }
         );
+
+        setLayoutProperty("point", "text-field", "You are here.");
     }
 
     function errorHandler(err) {
@@ -606,10 +608,6 @@
             "id": "point",
             "type": "symbol",
             "source": "markers",
-            // "paint": {
-            //        "circle-radius": 12,
-            //        "circle-color": "#0000FF"
-            //    } ,   
             "layout": {
                 "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
                 "icon-size": 1.5,
