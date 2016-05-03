@@ -80,10 +80,6 @@
     ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
-
-    <link rel="Bookmark"   href="favicon.ico"><!--收藏夹中的图标-->
-	<link rel="shortcut icon" href="favicon.ico" ><!--地址栏前面的图标-->
-
 </head>
 <!--  Layer Control toggle -->
 <style>
@@ -255,19 +251,18 @@
     }
 }
 </style>
-<<<<<<< HEAD
 
 <!-- test for mobile display-->
 <style>
 /* Tablet */
 @media only screen and (max-width:770px) {
   .help-tip { width:33.3333%; }
-  .legend { margin-left:33.3333%; }
+  .mb-watermark { margin-left:33.3333%; }
 }
 
 /* Mobile */
 @media only screen and (max-width:640px) {
-  .help-tip	 {
+  .listing-container {
     padding:0;
     margin:0;
     border-radius:0;
@@ -277,22 +272,19 @@
     position:fixed;
     width:100%;
     }
-  #features {
-	position: absolute;
-    bottom: 0;
-    left: 85%;
-    overflow: hidden;
-    font-size: 12px;
-    font-family: verdana;
-    color: black;
-    background: rgba(255, 255, 255, 0.5);
-    padding: 8px;
+  .mb-watermark {
+    bottom:40%;
+    left:10px;
+    margin-left:0;
     }
+  input[type='checkbox'] + label {
+    width:25%;
+    border:none;
+    }
+}
 </style>
 
 
-=======
->>>>>>> parent of 49a0205... updated to Bitbucket version
 <style>
     #features {
     position: absolute;
@@ -302,9 +294,8 @@
     font-size: 12px;
     font-family: verdana;
     color: black;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.5);
     padding: 8px;
-}
 </style>
 
 <body>
@@ -431,6 +422,7 @@
         ];
 
         var map = new mapboxgl.Map({
+        	attributionControl: true,
             container: "map", // container id
             //style: "mapbox://styles/natcatmodeling/cin69vk490028b5m4jbsij3ks", //stylesheet location
             style: "mapbox://styles/mapbox/light-v8",
@@ -836,13 +828,37 @@
                 closeOnClick: true
             })
             .setLngLat(feature.geometry.coordinates)
-            .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
+            .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
             .addTo(map);
     });
 
- map.on("touchstart", function(e) {
 
-  var features = map.queryRenderedFeatures(e.point, {
+    map.on("mousemove", function(e) {
+
+        // show Lat/lon & Liqueafaction info in the Tex Box
+        var liqueInfo = map.queryRenderedFeatures(e.point, {
+            layers: ["liqueVH", "liqueH","liqueM","liqueL","liqueVL"]
+        });
+        
+        // show Liqu + Lat/lon in the Text Box
+        if (liqueInfo.length) {
+            document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:"+ liqueInfo[0].properties.LIQ + "<br> Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        } else {
+    	// show only Lat/lon in the Text Box
+        	document.getElementById("features").innerHTML = JSON.stringify("Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        }
+
+
+
+        // change mouse pointer when close to Quake event circles
+        var features = map.queryRenderedFeatures(e.point, {
+
+            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        });
+        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
+
+        // fault line name popup
+        features = map.queryRenderedFeatures(e.point, {
         	radius: 5,
             layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
         });
@@ -853,38 +869,9 @@
                 //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
                 .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL + "' target='_blank'>" + features[0].properties.name + " </a>"+ "</span>")
                 .addTo(map);
-            // hightlighted fault segment
-            map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
-        } else {
-            map.setFilter("USGSfaults-hover", ["==", "name", ""]);
-        }
-    });
-
-    map.on("mousemove", function(e) {
-
-        // show mouse name in the Text Box
-        document.getElementById("features").innerHTML = JSON.stringify("Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
-
-        var features = map.queryRenderedFeatures(e.point, {
-            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
-        });
-        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
-
-        // fault line name popup
-        features = map.queryRenderedFeatures(e.point, {
-            layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
-        });
-
-        if (features.length) {
-            // Populate the popup and set its coordinates based on the feature found.
-            popup.setLngLat(e.lngLat)
-                //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
-                .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + features[0].properties.name + "</span>")
-                .addTo(map);
 
 
             // hightlighted fault segment
-
             map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
         } else {
             map.setFilter("USGSfaults-hover", ["==", "name", ""]);
@@ -892,6 +879,8 @@
 
     });
     </script>
+
+
 </body>
 
 </html>
