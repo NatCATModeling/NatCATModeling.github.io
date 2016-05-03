@@ -80,6 +80,10 @@
     ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
+
+    <link rel="Bookmark"   href="favicon.ico"><!--收藏夹中的图标-->
+	<link rel="shortcut icon" href="favicon.ico" ><!--地址栏前面的图标-->
+
 </head>
 <!--  Layer Control toggle -->
 <style>
@@ -257,12 +261,12 @@
 /* Tablet */
 @media only screen and (max-width:770px) {
   .help-tip { width:33.3333%; }
-  .mb-watermark { margin-left:33.3333%; }
+  .legend { margin-left:33.3333%; }
 }
 
 /* Mobile */
 @media only screen and (max-width:640px) {
-  .listing-container {
+  .help-tip	 {
     padding:0;
     margin:0;
     border-radius:0;
@@ -272,16 +276,17 @@
     position:fixed;
     width:100%;
     }
-  .mb-watermark {
-    bottom:40%;
-    left:10px;
-    margin-left:0;
+  #features {
+	position: absolute;
+    bottom: 0;
+    left: 85%;
+    overflow: hidden;
+    font-size: 12px;
+    font-family: verdana;
+    color: black;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 8px;
     }
-  input[type='checkbox'] + label {
-    width:25%;
-    border:none;
-    }
-}
 </style>
 
 
@@ -296,6 +301,7 @@
     color: black;
     background: rgba(255, 255, 255, 0.5);
     padding: 8px;
+}
 </style>
 
 <body>
@@ -832,6 +838,25 @@
             .addTo(map);
     });
 
+ map.on("touchstart", function(e) {
+
+  var features = map.queryRenderedFeatures(e.point, {
+        	radius: 5,
+            layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
+        });
+
+        if (features.length) {
+            // Populate the popup and set its coordinates based on the feature found.
+            popup.setLngLat(e.lngLat)
+                //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
+                .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL + "' target='_blank'>" + features[0].properties.name + " </a>"+ "</span>")
+                .addTo(map);
+            // hightlighted fault segment
+            map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
+        } else {
+            map.setFilter("USGSfaults-hover", ["==", "name", ""]);
+        }
+    });
 
     map.on("mousemove", function(e) {
 
