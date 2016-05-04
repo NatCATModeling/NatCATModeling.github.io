@@ -393,7 +393,7 @@ map.on("style.load", function() {
             "text-anchor": "top"
         },
         "paint": {
-            "text-color": "black"
+            "text-color": "blue"
         }
     });
 
