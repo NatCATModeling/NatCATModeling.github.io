@@ -11,15 +11,14 @@
     <title>California Earthquake Faults and Liquefaction Maps</title>
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     
     <!-- Map box-->
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.18.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css" rel="stylesheet" />
     <style>
     body {
         margin: 0;
@@ -88,12 +87,13 @@
     background: #fff;
     position: absolute;
     z-index: 9;
-    top: 2%;
-    right: 2%;
-    border-radius: 3px;
-    width: 12%;
+    top: 10%;
+    right: 5px;
+    border-radius: 2px;
+    width: 200px;
     border: 1px solid rgba(0, 0, 0, 0.4);
     font-family: 'Open Sans', sans-serif;
+    opacity: 0.8;
 }
 
 #menu a {
@@ -202,7 +202,7 @@
     background-color: #1E2021;
     padding: 10px;
     width: 300px;
-    position: relative;
+    position: absolute;
     border-radius: 3px;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
     left: -4px;
@@ -213,7 +213,7 @@
 }
 
 .help-tip p:before {
-    position: relative;
+    position: absolute;
     content: '';
     width: 0;
     height: 0;
@@ -224,12 +224,12 @@
 }
 
 .help-tip p:after {
-    width: 100%;
-    height: 40px;
     content: '';
-    position: relative;
-    top: 0px;
-    left: 40px;
+	position: absolute;
+    margin-top: -5px;
+    border-width: 5px;
+    top: 50%;
+    right: 105%; 
 }
 
 @-webkit-keyframes fadeIn {
@@ -263,25 +263,7 @@
 
 /* Mobile */
 @media only screen and (max-width:640px) {
-  .listing-container {
-    padding:0;
-    margin:0;
-    border-radius:0;
-    top:auto;
-    height:40%;
-    z-index:10;
-    position:fixed;
-    width:100%;
-    }
-  .mb-watermark {
-    bottom:40%;
-    left:10px;
-    margin-left:0;
-    }
-  input[type='checkbox'] + label {
-    width:25%;
-    border:none;
-    }
+
 }
 </style>
 
@@ -294,9 +276,10 @@
     overflow: visible;
     font-size: 12px;
     font-family: verdana;
-    color: black;
+    font-weight: bold;
+    color: blue;
     background: rgba(255, 255, 255, 0.5);
-    padding: 8px;
+    padding: 3px;
 </style>
 
 <body>
@@ -306,7 +289,7 @@
     .legend span {
         display: block;
         float: left;
-        height: 13px;
+        height: 12px;
         width: 20%;
         text-align: center;
         font: 10px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
@@ -317,10 +300,10 @@
         position: absolute;
         top: 65%;
         left: 5%;
-        width: 25%;
+        width: 250px;
         z-index: 1;
         background: rgba(255, 255, 255, 0.95);
-        padding: 10px;
+        padding: 12px;
     }
     </style>
     <style>
@@ -333,7 +316,7 @@
     ul span#one {
         align: left;
         vertical-align: middle;
-        font-size: 220%;
+        font-size: 250%;
         color: #F276E4;
         opacity: 0.9;
     }
@@ -362,20 +345,25 @@
     <!-- Set the display of this container to none so we can
      add it programmatically to `legendControl` -->
     <div id="legend" style="display:table;">
-        <ul><span id="rwo"><span style="width:70px;background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
+        
+        <ul><span id="rwo"><span style="background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
             <div id="Fault" class="help-tip">
                 <p style="color:#a9a9a9; "> The linewidth of the fault traces is proportional to the amount of slip‐rate along the corresponding fault. Faults data from the Quaternary Fault and Fold Database of the United States. Source: <a href="http://earthquake.usgs.gov/hazards/qfaults/">USGS</a></p>
             </div>
         </ul>
+        
         <ul><span id="one">●</span><strong>M2.5+ Events</strong>
             <div id="LiveEQ" class="help-tip">
                 <p style="color:#a9a9a9; ">Circle size indicates magnitude of earthquake. Include all M2.5+ events occured within the past 30 days. Click to view more details. Data refreshs every 15 minutes. Source: <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a></p>
             </div>
         </ul>
+        
         <strong>Liquefaction Susceptibility</strong>
+        
         <div id="Lique" class="help-tip">
             <p style="color:#a9a9a9; ">Liquefaction susceptibility data only available in the San Fracisco Bay Area. Zoom in to view details. Source: <a href="http://geomaps.wr.usgs.gov/sfgeo/liquefaction/susceptibility.html">USGS</a></p>
         </div>
+
         <nav class="legend clearfix">
             <span style="background:#810f7c;opacity:0.8;"></span>
             <span style="background:#8856a7;opacity:0.8;"></span>
@@ -388,6 +376,8 @@
             <label>Low</label>
             <label>Very Low</label>
         </nav>
+
+
     </div>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.css" type="text/css" />
@@ -395,8 +385,8 @@
     #geocoder-container {
         position: absolute;
         top: 0;
-        width: 100%;
-        margin-top: 15px;
+        width: 125%;
+        margin-top: 5px;
     }
     
     #geocoder-container > div {
@@ -541,9 +531,9 @@
     });
 
 
-    var intervalID = window.setInterval(function() {
+    window.setInterval(function() {
         source.setData(url);
-    }, 90);
+    }, 900);
 
     // After the map style has loaded on the page, add a source layer and default
     // styling for a single point.
@@ -635,11 +625,11 @@
         map.setLayoutProperty("liqueH", 'visibility', 'none');
         map.setLayoutProperty("liqueVH", 'visibility', 'none');
 
-        addLayer('Very High Liquefaction Susceptibility', 'liqueVH');
-        addLayer('High Liquefaction Susceptibility', 'liqueH');
-        addLayer('Medium Liquefaction Susceptibility', 'liqueM');
-        addLayer('Low Liquefaction Susceptibility', 'liqueL');
-        addLayer('Very Low Liquefaction Susceptibility', 'liqueVL');
+        addLayer('Very High (VH) Liquefaction', 'liqueVH');
+        addLayer('High (H) Liquefaction', 'liqueH');
+        addLayer('Medium (M) Liquefaction', 'liqueM');
+        addLayer('Low (L) Liquefaction', 'liqueL');
+        addLayer('Very Low (VL) Liquefaction', 'liqueVL');
 
         
 
