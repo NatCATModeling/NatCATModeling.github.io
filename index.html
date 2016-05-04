@@ -9,30 +9,14 @@
     <meta name="author" content="Liang Chang, PhD, CCRA">
     <meta name="keywords" content="Catastrophe, risk, hazard, San Francisco, Bay Area, Los Angeles, California, earthquake, seismic, hazard, risk, damage, liquefaction, landslide, fault, vulnerability, distance to fault, fault lines, rupture, USGS, Department of Insurance, Earthquake insurance, Earthquake insurance coverage">
     <title>California Earthquake Faults and Liquefaction Maps</title>
-    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    
     <!-- Map box-->
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.17.0/mapbox-gl.css" rel="stylesheet" />
-    <style>
-    body {
-        margin: 0;
-        padding: 0;
-    }
-    
-    #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-    }
-    </style>
-    
     <!-- Heap Analytics -->
     <script type="text/javascript">
     window.heap = window.heap || [], heap.load = function(e, t) {
@@ -50,18 +34,14 @@
     };
     heap.load("1149218029");
     </script>
-
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
-
-     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-
     <!-- Google Analytics -->
     <script>
     (function(i, s, o, g, r, a, m) {
@@ -80,290 +60,26 @@
     ga('send', 'pageview');
     </script>
     <!-- End Google Analytics -->
+    <!-- CSS for map -->
+    <link rel="stylesheet" href="css/style.css" />
 </head>
-<!--  Layer Control toggle -->
-<style>
-#menu {
-    background: #fff;
-    position: absolute;
-    z-index: 9;
-    top: 10%;
-    right: 5px;
-    border-radius: 2px;
-    width: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    font-family: 'Open Sans', sans-serif;
-    opacity: 0.8;
-}
-
-#menu a {
-    font-size: 11px;
-    color: #404040;
-    display: block;
-    margin: 0;
-    padding: 0;
-    padding: 8px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    text-align: center;
-}
-
-#menu a:last-child {
-    border: none;
-}
-
-#menu a:hover {
-    background-color: #f8f8f8;
-    color: #404040;
-}
-
-#menu a.active {
-    background-color: #3887be;
-    color: #ffffff;
-}
-
-#menu a.active:hover {
-    background: #3074a4;
-}
-</style>
-<style>
-.help-tip {
-    text-align: center;
-    background-color: #BCDBEA;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    font-size: 12px;
-    line-height: 12px;
-    cursor: default;
-}
-
-#Fault {
-    position: absolute;
-    top: 8%;
-    left: 53%;
-    text-align: center;
-    background-color: #BCDBEA;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    font-size: 12px;
-    line-height: 12px;
-    cursor: default;
-}
-
-#LiveEQ {
-    position: absolute;
-    top: 32%;
-    left: 51%;
-    text-align: center;
-    background-color: #BCDBEA;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    font-size: 12px;
-    line-height: 12px;
-    cursor: default;
-}
-
-#Lique {
-    position: absolute;
-    bottom: 34%;
-    left: 82%;
-    text-align: center;
-    background-color: #BCDBEA;
-    border-radius: 50%;
-    width: 14px;
-    height: 14px;
-    font-size: 12px;
-    line-height: 12px;
-    cursor: default;
-}
-
-.help-tip:before {
-    content: '?';
-    font-weight: bold;
-    color: #fff;
-}
-
-.help-tip:hover p {
-    display: block;
-    transform-origin: 100% 0%;
-    -webkit-animation: fadeIn 0.3s ease-in-out;
-    animation: fadeIn 0.3s ease-in-out;
-    visibility: visible;
-    z-index: 8;
-}
-
-.help-tip p {
-    display: none;
-    visibility: hidden;
-    text-align: left;
-    background-color: #1E2021;
-    padding: 10px;
-    width: 300px;
-    position: absolute;
-    border-radius: 3px;
-    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.95);
-    left: -4px;
-    color: #FFF;
-    font-size: 11px;
-    font-family: verdana;
-    line-height: 1.4;
-}
-
-.help-tip p:before {
-    position: absolute;
-    content: '';
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-bottom-color: #1E2021;
-    left: 40px;
-    bottom: -40px;
-}
-
-.help-tip p:after {
-    content: '';
-	position: absolute;
-    margin-top: -5px;
-    border-width: 5px;
-    top: 50%;
-    right: 105%; 
-}
-
-@-webkit-keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: scale(0.6);
-    }
-    100% {
-        opacity: 100%;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 100%;
-    }
-}
-</style>
-
-<!-- test for mobile display-->
-<style>
-/* Tablet */
-@media only screen and (max-width:770px) {
-  .help-tip { width:33.3333%; }
-  .mb-watermark { margin-left:33.3333%; }
-}
-
-/* Mobile */
-@media only screen and (max-width:640px) {
-
-}
-</style>
-
-
-<style>
-    #features {
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    overflow: visible;
-    font-size: 12px;
-    font-family: verdana;
-    font-weight: bold;
-    color: blue;
-    background: rgba(255, 255, 255, 0.5);
-    padding: 3px;
-</style>
 
 <body>
-
-    <style>
-    .legend label,
-    .legend span {
-        display: block;
-        float: left;
-        height: 12px;
-        width: 20%;
-        text-align: center;
-        font: 10px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
-        color: #808080;
-    }
-    
-    #legend {
-        position: absolute;
-        top: 65%;
-        left: 5%;
-        width: 250px;
-        z-index: 1;
-        background: rgba(255, 255, 255, 0.95);
-        padding: 12px;
-    }
-    </style>
-    <style>
-    ul {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
-    
-    ul span#one {
-        align: left;
-        vertical-align: middle;
-        font-size: 250%;
-        color: #F276E4;
-        opacity: 0.9;
-    }
-    
-    ul span#two {
-        align: left;
-        vertical-align: middle;
-        font-size: 10%;
-        color: red;
-        opacity: 0.9;
-    }
-    
-    ul span#rwo {
-        align: left;
-        vertical-align: middle;
-        width: 18%;
-        font-size: 1%;
-        height: 4px;
-        border: none;
-        border-top: 4px solid red;
-        margin: 2;
-        padding: 0;
-        opacity: 0.9;
-    }
-    </style>
-    <!-- Set the display of this container to none so we can
-     add it programmatically to `legendControl` -->
     <div id="legend" style="display:table;">
-        
         <ul><span id="rwo"><span style="background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
             <div id="Fault" class="help-tip">
                 <p style="color:#a9a9a9; "> The linewidth of the fault traces is proportional to the amount of slip‐rate along the corresponding fault. Faults data from the Quaternary Fault and Fold Database of the United States. Source: <a href="http://earthquake.usgs.gov/hazards/qfaults/">USGS</a></p>
             </div>
         </ul>
-        
         <ul><span id="one">●</span><strong>M2.5+ Events</strong>
             <div id="LiveEQ" class="help-tip">
                 <p style="color:#a9a9a9; ">Circle size indicates magnitude of earthquake. Include all M2.5+ events occured within the past 30 days. Click to view more details. Data refreshs every 15 minutes. Source: <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a></p>
             </div>
         </ul>
-        
         <strong>Liquefaction Susceptibility</strong>
-        
         <div id="Lique" class="help-tip">
             <p style="color:#a9a9a9; ">Liquefaction susceptibility data only available in the San Fracisco Bay Area. Zoom in to view details. Source: <a href="http://geomaps.wr.usgs.gov/sfgeo/liquefaction/susceptibility.html">USGS</a></p>
         </div>
-
         <nav class="legend clearfix">
             <span style="background:#810f7c;opacity:0.8;"></span>
             <span style="background:#8856a7;opacity:0.8;"></span>
@@ -376,502 +92,36 @@
             <label>Low</label>
             <label>Very Low</label>
         </nav>
-
-
     </div>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.js"></script>
     <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.0.0/mapbox-gl-geocoder.css" type="text/css" />
-    <style>
-    #geocoder-container {
-        position: absolute;
-        top: 0;
-        width: 125%;
-        margin-top: 5px;
-    }
-    
-    #geocoder-container > div {
-        min-width: 30%;
-        margin-left: 25%;
-    }
-    </style>
     <nav id="menu"></nav>
     <div id="map"></div>
     <pre id="features"></pre>
     <div id="geocoder-container"></div>
-    <script>
-    mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2dHMza3FmN3VhdnNveCJ9.cq75mgWIzoAaesbmdR6T6Q";
 
-
-    if (!mapboxgl.supported()) {
-        alert("Your browser does not support Mapbox GL. Please try a different browser, e.g., Google Chrome or Firefox.");
-    } else {
-
-        // Set map bounda to North America only.
-        var bounds = [
-            [-175, 25], // Southwest coordinates
-            [-20, 70] // Northeast coordinates
-        ];
-
-        var map = new mapboxgl.Map({
-        	attributionControl: true,
-            container: "map", // container id
-            //style: "mapbox://styles/natcatmodeling/cin69vk490028b5m4jbsij3ks", //stylesheet location
-            style: "mapbox://styles/mapbox/light-v8",
-            center: [-122.419, 37.7749], // starting position
-            zoom: 9, // starting zoom
-            maxBounds: bounds // Sets bounds as max
-        });
-    }
-
-
-    function showLocation(position) {
-        var latitude = position.coords.latitude;
-        var longitude = position.coords.longitude;
-        map.setZoom(12);
-        map.setCenter([longitude, latitude]);
-
-        // add marker
-        map.getSource("markers").setData(
-            {
-                "type": "FeatureCollection",
-                "features": [{
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [longitude, latitude]
-                    }
-                }]
-            }
-        );
-
-        //change marker text
-        //map.setLayoutProperty("point", "text-field", "You are here.");
-    }
-
-    function errorHandler(err) {
-        if (err.code == 1) {
-            alert("Error: Request to get location is denied!");
-        } else if (err.code == 2) {
-            alert("Error: Position is unavailable!");
-        }
-    }
-
-    function getLocation() {
-
-        if (navigator.geolocation) {
-            // timeout at 60000 milliseconds (60 seconds)
-            var options = {
-                timeout: 60000
-            };
-            navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
-        } else {
-            alert("Sorry, browser does not support geo-location!");
-        }
-    }
-
-    // layer control function
-    function addLayer(name, id) {
-        var link = document.createElement('a');
-        link.href = '#';
-        link.className = '';
-        link.textContent = name;
-
-        link.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            var visibility = map.getLayoutProperty(id, 'visibility');
-
-            if (visibility == 'visible') {
-                map.setLayoutProperty(id, 'visibility', 'none');
-                this.className = '';
-            } else {
-                this.className = 'active';
-                map.setLayoutProperty(id, 'visibility', 'visible');
-            }
-        };
-
-        var layers = document.getElementById('menu');
-        layers.appendChild(link);
-    }
-
-    // Add zoom and geo-location, and geocoder controls to the map
-    var geocoder = new mapboxgl.Geocoder({
-        position: "top-left",
-        country: "us",
-        type: "postcode,address,region,place,locality,neighborhood,poi",
-        placeholder: "Find an address, ZIP, or Place",
-        container: "geocoder-container",
-        autocomplete: "true",
-        proximity: [-119.4179,36.7783]
-    });
-
-    map.addControl(geocoder);
-
-
-    map.addControl(new mapboxgl.Navigation({
-        position: "top-left"
-    }));
-
-    var geoLocator = new mapboxgl.Geolocate({
-        position: "top-left"
-    });
-
-    map.addControl(geoLocator);
-
-    var popup = new mapboxgl.Popup({
-        closeButton: false,
-        closeOnClick: false
-    });
-
-    //define USGS data feed source
-    var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson";
-    var source = new mapboxgl.GeoJSONSource({
-        data: url
-    });
-
-
-    window.setInterval(function() {
-        source.setData(url);
-    }, 900);
-
-    // After the map style has loaded on the page, add a source layer and default
-    // styling for a single point.
-    map.on("style.load", function() {
-        // add teh soil liquefaction layers
-        map.addSource('liquefaction', {
-            type: 'vector',
-            url: 'mapbox://natcatmodeling.20u13bk5'
-        });
-        map.addLayer({
-            'id': 'liqueVH',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#7a0177',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "VH"]
-        });
-
-        map.addLayer({
-            'id': 'liqueH',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#c51b8a',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "H"]
-        });
-
-        map.addLayer({
-            'id': 'liqueM',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#f768a1',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "M"]
-        });
-
-        map.addLayer({
-            'id': 'liqueL',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#fbb4b9',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "L"]
-        });
-
-        map.addLayer({
-            'id': 'liqueVL',
-            'type': 'fill',
-            'source': 'liquefaction',
-            'source-layer': "bayarea_liqsus_vh",
-            'layout': {
-                'visibility': 'visible'
-            },
-            'paint': {
-                'fill-color': '#feebe2',
-                'fill-opacity': 0.8
-            },
-            "filter": ["==", "LIQ", "VL"]
-        });
-
-        //set initial visibility
-        map.setLayoutProperty("liqueVL", 'visibility', 'none');
-        map.setLayoutProperty("liqueL", 'visibility', 'none');
-        map.setLayoutProperty("liqueM", 'visibility', 'none');
-        map.setLayoutProperty("liqueH", 'visibility', 'none');
-        map.setLayoutProperty("liqueVH", 'visibility', 'none');
-
-        addLayer('Very High (VH) Liquefaction', 'liqueVH');
-        addLayer('High (H) Liquefaction', 'liqueH');
-        addLayer('Medium (M) Liquefaction', 'liqueM');
-        addLayer('Low (L) Liquefaction', 'liqueL');
-        addLayer('Very Low (VL) Liquefaction', 'liqueVL');
-
-        
-
-        //add live EQ data
-        map.addSource("USGSLiveEvnt", source);
-        var mags = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        for (var i = 0; i < mags.length; i++) {
-            var mag = mags[i];
-            map.addLayer({
-                "id": "quakes-" + mag,
-                "interactive": true,
-                "type": "circle",
-                "source": "USGSLiveEvnt",
-                "filter": ["all", [">=", "mag", mag],
-                    ["<", "mag", mag + 1]
-                ],
-                "paint": {
-                    "circle-radius": Math.pow(mag, 2.6),
-                    "circle-color": "#F276E4",
-                    "circle-opacity": 0.9
-                }
-            });
-        }
-
-        // add custom source from mapbox [use unique MapID]
-        map.addSource("mySource", {
-            type: "vector",
-            url: "mapbox://natcatmodeling.5nvu1zch" //uploaded Shapefile for USGS faults
-        });
-
-        // Add a layer to the map"s style. Here, we reference the source we created above and make sure to point to the layer we want within that source"s
-
-        // map.addLayer({
-        //     "id": "USGSfaults",
-        //     "type": "line",
-        //     "source": "mySource",
-        //     "source-layer": "sectionsall",
-        //     "layout": {
-        //         "line-join": "round",
-        //         "line-cap": "round"
-        //     },
-        //     "paint": {
-        //         "line-color": "red",
-        //         "line-width": 2
-        //     }
-        // });  
-        map.addLayer({
-            "id": "USGSfaults-1",
-            "type": "line",
-            "source": "mySource",
-            "source-layer": "sectionsall",
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "#FF0000",
-                "line-width": 3
-            },
-            "filter": ["==", "slipcode", 1]
-        });
-
-        map.addLayer({
-            "id": "USGSfaults-2",
-            "type": "line",
-            "source": "mySource",
-            "source-layer": "sectionsall",
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "#FF0000",
-                "line-width": 2
-            },
-            "filter": ["==", "slipcode", 2]
-        });
-
-        map.addLayer({
-            "id": "USGSfaults-3",
-            "type": "line",
-            "source": "mySource",
-            "source-layer": "sectionsall",
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "#FF0000",
-                "line-width": 1.5
-            },
-            "filter": ["==", "slipcode", 3]
-        });
-
-        map.addLayer({
-            "id": "USGSfaults-4",
-            "type": "line",
-            "source": "mySource",
-            "source-layer": "sectionsall",
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "#FF0000",
-                "line-width": 1
-            },
-            "filter": ["==", "slipcode", 4]
-        });
-
-
-        // add the filtered layer for highlighed segment
-        map.addLayer({
-            "id": "USGSfaults-hover",
-            "type": "line",
-            "source": "mySource",
-            "source-layer": "sectionsall",
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "blue",
-                "line-width": 3.5
-            },
-            "filter": ["==", "name", ""]
-        });
-
-// find current location
-        getLocation();
-
-        map.addSource("markers", {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [],
-                "properties": {
-                    "title": "Address",
-                    "marker-symbol": "star-15",
-                    "marker-size": "large",
-                    "marker-color": "#0000FF"
-                }
-            }
-        });
-
-        map.addLayer({
-            "id": "point",
-            "type": "symbol",
-            "source": "markers",
-            "layout": {
-                "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
-                "icon-size": 1.6,
-                "text-field": "Your Location",
-                "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-                "text-size": 18,
-                "text-offset": [0, 1.2],
-                "text-anchor": "top"
-            },
-            "paint":{
-                "text-color": "black"
-            }
-        });
-
-        // Listen for the `result` event that is triggered when a user
-        // makes a selection and add a marker that matches the result.
-        geocoder.on("result", function(ev) {
-            map.getSource("markers").setData(ev.result.geometry);
-        });
-
-
-
-    });
-
-    map.on("click", function(e) {
-        var features = map.queryRenderedFeatures(e.point, {
-            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
-        });
-
-        if (!features.length) {
-            return;
-        }
-
-        var feature = features[0];
-
-        var popup = new mapboxgl.Popup({
-                closeButton: false,
-                closeOnClick: true
-            })
-            .setLngLat(feature.geometry.coordinates)
-            .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
-            .addTo(map);
-    });
-
-
-    map.on("mousemove", function(e) {
-
-        // show Lat/lon & Liqueafaction info in the Tex Box
-        var liqueInfo = map.queryRenderedFeatures(e.point, {
-            layers: ["liqueVH", "liqueH","liqueM","liqueL","liqueVL"]
-        });
-        
-        // show Liqu + Lat/lon in the Text Box
-        if (liqueInfo.length) {
-            document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:"+ liqueInfo[0].properties.LIQ + "<br> Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
-        } else {
-    	// show only Lat/lon in the Text Box
-        	document.getElementById("features").innerHTML = JSON.stringify("Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
-        }
-
-
-
-        // change mouse pointer when close to Quake event circles
-        var features = map.queryRenderedFeatures(e.point, {
-
-            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
-        });
-        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
-
-        // fault line name popup
-        features = map.queryRenderedFeatures(e.point, {
-        	radius: 5,
-            layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
-        });
-
-        if (features.length) {
-            // Populate the popup and set its coordinates based on the feature found.
-            popup.setLngLat(e.lngLat)
-                //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
-                .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL + "' target='_blank'>" + features[0].properties.name + " </a>"+ "</span>")
-                .addTo(map);
-
-
-            // hightlighted fault segment
-            map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
-        } else {
-            map.setFilter("USGSfaults-hover", ["==", "name", ""]);
-        }
-
-    });
-    </script>
-
-
+    <form id="config">
+        <fieldset id="config-fields">
+            <div id="header-right-container" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: rgba(255, 255, 255, 0);">
+                <div class="row">
+                    <div class="input-group pull-right" style="width:200px">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
+                        <select id="styleSelect" class="form-control input-sm" style="width:120px">
+                            <option value="mapbox://styles/mapbox/dark-v8">Subtle Dark</option>
+                            <option value="mapbox://styles/mapbox/light-v8">Subtle Light</option>
+                            <option value="mapbox://styles/mapbox/bright-v8">Bright</option>
+                            <option value="mapbox://styles/mapbox/streets-v8">Streets</option>
+                            <option value="mapbox://styles/mapbox/emerald-v8">Emerald</option>
+                            <option value="mapbox://styles/mapbox/basic-v8">Simple and flexible</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    <!-- Index javascripts -->
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>
