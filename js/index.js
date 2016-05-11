@@ -128,9 +128,15 @@ var source = new mapboxgl.GeoJSONSource({
     data: url
 });
 
+// past hr Events
+var url_Hr = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson";
+var source_Hr = new mapboxgl.GeoJSONSource({
+    data: url_Hr
+});
 
 window.setInterval(function() {
     source.setData(url);
+    source_Hr.setDate(url_Hr);
 }, 900);
 
 var flag =0;
@@ -233,15 +239,18 @@ map.on("style.load", function() {
         addLayer('Medium (M) Liquefaction', 'liqueM');
         addLayer('Low (L) Liquefaction', 'liqueL');
         addLayer('Very Low (VL) Liquefaction', 'liqueVL');
-    } 
+    }
 
 
 
     //add live EQ data
     map.addSource("USGSLiveEvnt", source);
+    map.addSource("USGSLiveEvnt_Hr", source_Hr);
     var mags = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     for (var i = 0; i < mags.length; i++) {
         var mag = mags[i];
+
+        //past 30 day events
         map.addLayer({
             "id": "quakes-" + mag,
             "interactive": true,
@@ -253,6 +262,22 @@ map.on("style.load", function() {
             "paint": {
                 "circle-radius": Math.pow(mag, 2.6),
                 "circle-color": "#F276E4",
+                "circle-opacity": 0.9
+            }
+        });
+
+        // past hr events
+           map.addLayer({
+            "id": "quakes_Hr" + mag,
+            "interactive": true,
+            "type": "circle",
+            "source": "USGSLiveEvnt_Hr",
+            "filter": ["all", [">=", "mag", mag],
+                ["<", "mag", mag + 1]
+            ],
+            "paint": {
+                "circle-radius": Math.pow(mag, 2.6),
+                "circle-color": "#ff9933",
                 "circle-opacity": 0.9
             }
         });
@@ -279,7 +304,7 @@ map.on("style.load", function() {
     //         "line-color": "red",
     //         "line-width": 2
     //     }
-    // });  
+    // });
     map.addLayer({
         "id": "USGSfaults-1",
         "type": "line",
@@ -407,7 +432,7 @@ map.on("style.load", function() {
 
 map.on("click", function(e) {
     var features = map.queryRenderedFeatures(e.point, {
-        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
     });
 
     if (!features.length) {
@@ -421,7 +446,7 @@ map.on("click", function(e) {
             closeOnClick: true
         })
         .setLngLat(feature.geometry.coordinates)
-        .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
+        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
         .addTo(map);
 });
 
@@ -446,7 +471,7 @@ map.on("mousemove", function(e) {
     // change mouse pointer when close to Quake event circles
     var features = map.queryRenderedFeatures(e.point, {
 
-        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
     });
     map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
 

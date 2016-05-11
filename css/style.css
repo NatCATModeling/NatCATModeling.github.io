@@ -2,14 +2,14 @@
         margin: 0;
         padding: 0;
     }
-    
+
     #map {
         position: absolute;
         top: 0;
         bottom: 0;
         width: 100%;
     }
-    
+
     #geocoder-container {
         position: absolute;
         top: 0;
@@ -17,18 +17,18 @@
         width: 100%;
         margin-top: 5px;
     }
-    
+
     #geocoder-container > div {
         min-width: 30%;
         margin-left: 25%;
     }
-    
+
     ul {
         margin: 0;
         padding: 0;
         list-style-type: none;
     }
-    
+
     ul span#one {
         align: left;
         vertical-align: middle;
@@ -36,16 +36,8 @@
         color: #F276E4;
         opacity: 0.9;
     }
-    
+
     ul span#two {
-        align: left;
-        vertical-align: middle;
-        font-size: 10%;
-        color: red;
-        opacity: 0.9;
-    }
-    
-    ul span#rwo {
         align: left;
         vertical-align: middle;
         width: 18%;
@@ -57,7 +49,7 @@
         padding: 0;
         opacity: 0.9;
     }
-    
+
     .legend label,
     .legend span {
         display: block;
@@ -68,7 +60,7 @@
         font: 10px/18px "Helvetica Neue", Arial, Helvetica, sans-serif;
         color: #808080;
     }
-    
+
     #legend {
         position: absolute;
         top: 65%;
@@ -78,7 +70,7 @@
         background: rgba(255, 255, 255, 0.95);
         padding: 12px;
     }
-    
+
     #menu {
         background: #fff;
         position: absolute;
@@ -91,7 +83,7 @@
         font-family: 'Open Sans', sans-serif;
         opacity: 0.8;
     }
-    
+
     #menu a {
         font-size: 11px;
         color: #404040;
@@ -103,25 +95,25 @@
         border-bottom: 1px solid rgba(0, 0, 0, 0.25);
         text-align: center;
     }
-    
+
     #menu a:last-child {
         border: none;
     }
-    
+
     #menu a:hover {
         background-color: #f8f8f8;
         color: #404040;
     }
-    
+
     #menu a.active {
         background-color: #3887be;
         color: #ffffff;
     }
-    
+
     #menu a.active:hover {
         background: #3074a4;
     }
-    
+
     #features {
         position: absolute;
         bottom: 0;
@@ -134,7 +126,7 @@
         background: rgba(255, 255, 255, 0.5);
         padding: 3px;
     }
-    
+
     .help-tip {
         text-align: center;
         background-color: #BCDBEA;
@@ -145,7 +137,7 @@
         line-height: 12px;
         cursor: default;
     }
-    
+
     #Fault {
         position: absolute;
         top: 8%;
@@ -159,7 +151,7 @@
         line-height: 12px;
         cursor: default;
     }
-    
+
     #LiveEQ {
         position: absolute;
         top: 32%;
@@ -173,7 +165,7 @@
         line-height: 12px;
         cursor: default;
     }
-    
+
     #Lique {
         position: absolute;
         bottom: 34%;
@@ -187,13 +179,13 @@
         line-height: 12px;
         cursor: default;
     }
-    
+
     .help-tip:before {
         content: '?';
         font-weight: bold;
         color: #fff;
     }
-    
+
     .help-tip:hover p {
         display: block;
         transform-origin: 100% 0%;
@@ -202,7 +194,7 @@
         visibility: visible;
         z-index: 8;
     }
-    
+
     .help-tip p {
         display: none;
         visibility: hidden;
@@ -219,7 +211,7 @@
         font-family: verdana;
         line-height: 1.4;
     }
-    
+
     .help-tip p:before {
         position: absolute;
         content: '';
@@ -230,7 +222,7 @@
         left: 40px;
         bottom: -40px;
     }
-    
+
     .help-tip p:after {
         content: '';
         position: absolute;
@@ -239,7 +231,7 @@
         top: 50%;
         right: 105%;
     }
-    
+
     @-webkit-keyframes fadeIn {
         0% {
             opacity: 0;
@@ -251,9 +243,7 @@
         }
     }
 
-    <!-- test for mobile display-->
     /* Tablet */
-    
     @media only screen and (max-width:770px) {
         .help-tip {
             width: 33.3333%;
@@ -263,5 +253,5 @@
         }
     }
     /* Mobile */
-    
+
     @media only screen and (max-width:640px) {}

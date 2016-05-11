@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
     <meta name="description" content="Nat CAT Modeling is a web site that aims to provide free natural catastrophe data and  information, as well as to promote a safe, resilient and sustainable built environemnt. It provides asscess to and visualize the seismic hazard and relevant data from publicly available infomation such as earthquake faults, liquefaction, soil infomation, and landslides.">
-    <meta name="author" content="Liang Chang, PhD, CCRA">
+    <meta name="author" content="Liang Chang, PhD, Certified Catastrophe Risk Analyst">
     <meta name="keywords" content="Catastrophe, risk, hazard, San Francisco, Bay Area, Los Angeles, California, earthquake, seismic, hazard, risk, damage, liquefaction, landslide, fault, vulnerability, distance to fault, fault lines, rupture, USGS, Department of Insurance, Earthquake insurance, Earthquake insurance coverage">
     <title>California Earthquake Faults and Liquefaction Maps</title>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -66,14 +66,14 @@
 
 <body>
     <div id="legend" style="display:table;">
-        <ul><span id="rwo"><span style="background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
+        <ul><span id="two"><span style="background:#fd0000;height:4px; margin-left:40px;margin-top:5px;"></span></span><strong>Fault Lines</strong>
             <div id="Fault" class="help-tip">
                 <p style="color:#a9a9a9; "> The linewidth of the fault traces is proportional to the amount of slip‐rate along the corresponding fault. Faults data from the Quaternary Fault and Fold Database of the United States. Source: <a href="http://earthquake.usgs.gov/hazards/qfaults/">USGS</a></p>
             </div>
         </ul>
         <ul><span id="one">●</span><strong>M2.5+ Events</strong>
             <div id="LiveEQ" class="help-tip">
-                <p style="color:#a9a9a9; ">Circle size indicates magnitude of earthquake. Include all M2.5+ events occured within the past 30 days. Click to view more details. Data refreshs every 15 minutes. Source: <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a></p>
+                <p style="color:#a9a9a9; ">Circle size indicates magnitude of earthquake. Purple circles represent all M2.5+ events occured within the past 30 days, and orange ones from the past 24 hours. Data refreshs every 15 minutes. Source: <a href="http://earthquake.usgs.gov/earthquakes/">USGS</a></p>
             </div>
         </ul>
         <strong>Liquefaction Susceptibility</strong>
@@ -107,13 +107,12 @@
                     <div class="input-group pull-right" style="width:200px">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-globe"></span></span>
                         <select id="styleSelect" class="form-control input-sm" style="width:120px">
-                            <option value="mapbox://styles/mapbox/light-v8">Subtle Light</option>
-                            <option value="mapbox://styles/mapbox/bright-v8">Bright</option>
-                            <option value="mapbox://styles/mapbox/streets-v8">Streets</option>
-                            <option value="mapbox://styles/mapbox/emerald-v8">Emerald</option>
-                            <option value="mapbox://styles/mapbox/basic-v8">Simple and flexible</option>
-                            <option value="mapbox://styles/mapbox/dark-v8">Subtle Dark</option>
-                            
+                            <option value="mapbox://styles/mapbox/light-v8">Light Base Map</option>
+                            <option value="mapbox://styles/mapbox/dark-v8">Dark Base Map</option>
+                            <option value="mapbox://styles/mapbox/bright-v8">Bright Base Map</option>
+                            <option value="mapbox://styles/mapbox/streets-v8">Streets Base Map</option>
+                            <option value="mapbox://styles/mapbox/emerald-v8">Emerald Base Map</option>
+                            <option value="mapbox://styles/mapbox/basic-v8">Simple Base Map</option>
                         </select>
                     </div>
                 </div>
