@@ -440,13 +440,14 @@ map.on("click", function(e) {
     }
 
     var feature = features[0];
+    var EvntDate = new Date(feature.properties.time);
 
     var popup = new mapboxgl.Popup({
             closeButton: false,
             closeOnClick: true
         })
         .setLngLat(feature.geometry.coordinates)
-        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + Date(feature.properties.time).toLocaleString() + "</a></span>")
+        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + EvntDate.toLocaleString() + "</a></span>")
         .addTo(map);
 });
 
