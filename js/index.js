@@ -23,6 +23,13 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
         });
     }
 
+  // Append data attribution
+  var credit = document.createElement('a');
+  credit.href = 'http://earthquake.usgs.gov';
+  credit.className = 'fill-darken2 pad0x inline fr color-white';
+  credit.target = '_target';
+  credit.textContent = 'Faults, Liqueafaction, and Event Info from USGS';
+  map.getContainer().querySelector('.mapboxgl-ctrl-bottom-right').appendChild(credit);
 
 function showLocation(position) {
     var latitude = position.coords.latitude;
