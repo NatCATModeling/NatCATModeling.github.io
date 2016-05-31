@@ -28,7 +28,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
   credit.href = 'http://earthquake.usgs.gov';
   credit.className = 'fill-darken2 pad0x inline fr color-white';
   credit.target = '_target';
-  credit.textContent = 'Faults, Liqueafaction, and Event Info from USGS';
+  credit.textContent = 'Data from USGS';
   map.getContainer().querySelector('.mapboxgl-ctrl-bottom-right').appendChild(credit);
 
 function showLocation(position) {
@@ -460,7 +460,6 @@ map.on("click", function(e) {
 
 
 map.on("mousemove", function(e) {
-
     // show Lat/lon & Liqueafaction info in the Tex Box
     var liqueInfo = map.queryRenderedFeatures(e.point, {
         layers: ["liqueVH", "liqueH", "liqueM", "liqueL", "liqueVL"]
@@ -468,13 +467,32 @@ map.on("mousemove", function(e) {
 
     // show Liqu + Lat/lon in the Text Box
     if (liqueInfo.length) {
-        document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:" + liqueInfo[0].properties.LIQ + "<br> Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        var liq = "";
+            switch ( liqueInfo[0].properties.LIQ) {
+                case "VH":
+                    liq = "Very High";
+                    break;
+                case "H":
+                    liq = "High";
+                    break;
+                case "M":
+                    liq = "Medium";
+                    break;
+                case "L":
+                    liq = "Low";
+                    break;
+                case "VL":
+                    liq= "Very Low";
+                    break;
+                default:
+                    liq = "NA (no data)";
+                    break;
+            }
+        document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:  " + liq + "<br> Long: " + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
     } else {
         // show only Lat/lon in the Text Box
-        document.getElementById("features").innerHTML = JSON.stringify("Longitude:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Latitude:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        document.getElementById("features").innerHTML = JSON.stringify("Long:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
     }
-
-
 
     // change mouse pointer when close to Quake event circles
     var features = map.queryRenderedFeatures(e.point, {
@@ -493,7 +511,7 @@ map.on("mousemove", function(e) {
         // Populate the popup and set its coordinates based on the feature found.
         popup.setLngLat(e.lngLat)
             //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
-            .setHTML("<span style='color:blue;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL + "' target='_blank'>" + features[0].properties.name + " </a>" + "</span>")
+            .setHTML("<span style='color:cyan;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL + "' target='_blank'>" + features[0].properties.name + " </a>" + "</span>")
             .addTo(map);
 
 
@@ -506,7 +524,7 @@ map.on("mousemove", function(e) {
 });
 
 
-// Map printiung
+// Base Map Selector
 form.styleSelect.addEventListener('change', function() {
     'use strict';
     map.setStyle(form.styleSelect.value);
