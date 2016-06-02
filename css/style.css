@@ -51,6 +51,7 @@
     }
 
     .legend label,
+
     .legend span {
         display: block;
         float: left;
@@ -82,6 +83,7 @@
         border: 1px solid rgba(0, 0, 0, 0.4);
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         opacity: 0.7;
+
     }
 
     #menu a {
@@ -93,7 +95,7 @@
         padding: 8px;
         text-decoration: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-        text-align: center;
+        text-align: left;
     }
 
     #menu a:last-child {
@@ -134,7 +136,7 @@
 
     .help-tip {
         text-align: center;
-        background-color: #BCDBEA;
+        background-color: #0E51F7;
         border-radius: 50%;
         width: 14px;
         height: 14px;
@@ -145,10 +147,10 @@
 
     #Fault {
         position: absolute;
-        top: 8%;
-        left: 53%;
+        top: 10%;
+        left: 52%;
         text-align: center;
-        background-color: #BCDBEA;
+        background-color: #0E51F7;
         border-radius: 50%;
         width: 14px;
         height: 14px;
@@ -159,10 +161,10 @@
 
     #LiveEQ {
         position: absolute;
-        top: 32%;
-        left: 51%;
+        top: 33%;
+        left: 50%;
         text-align: center;
-        background-color: #BCDBEA;
+        background-color: #0E51F7;
         border-radius: 50%;
         width: 14px;
         height: 14px;
@@ -173,10 +175,10 @@
 
     #Lique {
         position: absolute;
-        bottom: 34%;
-        left: 82%;
+        bottom: 33%;
+        left: 79%;
         text-align: center;
-        background-color: #BCDBEA;
+        background-color: #0E51F7;
         border-radius: 50%;
         width: 14px;
         height: 14px;
@@ -195,7 +197,7 @@
         display: block;
         transform-origin: 100% 0%;
         -webkit-animation: fadeIn 0.3s ease-in-out;
-        animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.2s ease-in-out;
         visibility: visible;
         z-index: 8;
     }
