@@ -34,20 +34,20 @@
         vertical-align: middle;
         font-size: 250%;
         color: #F276E4;
-        opacity: 0.9;
+        opacity: 0.8;
     }
 
     ul span#two {
         align: left;
         vertical-align: middle;
-        width: 18%;
+        width: 16%;
         font-size: 1%;
         height: 4px;
         border: none;
-        border-top: 4px solid red;
-        margin: 2;
-        padding: 0;
-        opacity: 0.9;
+        border-top: 3px solid red;
+        margin: 1;
+        padding: 1;
+        opacity: 0.8;
     }
 
     .legend label,
@@ -58,7 +58,7 @@
         height: 16px;
         width: 20%;
         text-align: center;
-        font: 10px/16px "Helvetica Neue", Arial, Helvetica, sans-serif;
+        font: 11px/16px "Helvetica Neue", Arial, Helvetica, sans-serif;
         color: #808080;
     }
 
@@ -68,7 +68,7 @@
         left: 5%;
         width: 250px;
         z-index: 1;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.75);
         padding: 12px;
     }
 
@@ -76,14 +76,13 @@
         background: #fff;
         position: absolute;
         z-index: 9;
-        top: 10%;
-        right: 1%;
+        top: 8%;
+        right: 2%;
         border-radius: 2px;
-        width: 180px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        opacity: 0.7;
-
+        width: 155px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        font: 11px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        opacity: 0.75;
     }
 
     #menu a {

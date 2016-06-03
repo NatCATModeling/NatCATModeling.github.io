@@ -130,20 +130,20 @@ var popup = new mapboxgl.Popup({
 });
 
 //define USGS data feed source
-var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.geojson";
+var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson";
 var source = new mapboxgl.GeoJSONSource({
     data: url
 });
 
 // past hr Events
-var url_Hr = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson";
+var url_Hr = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson";
 var source_Hr = new mapboxgl.GeoJSONSource({
     data: url_Hr
 });
 
 window.setInterval(function() {
     source.setData(url);
-    source_Hr.setDate(url_Hr);
+   source_Hr.setData(url_Hr);
 }, 900);
 
 var flag =0;
@@ -267,7 +267,7 @@ map.on("style.load", function() {
                 ["<", "mag", mag + 1]
             ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.6),
+                "circle-radius": Math.pow(mag, 2.7),
                 "circle-color": "#F276E4",
                 "circle-opacity": 0.9
             }
@@ -283,7 +283,7 @@ map.on("style.load", function() {
                 ["<", "mag", mag + 1]
             ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.6),
+                "circle-radius": Math.pow(mag, 2.7),
                 "circle-color": "#ff9933",
                 "circle-opacity": 0.9
             }
