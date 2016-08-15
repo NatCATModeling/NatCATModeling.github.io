@@ -454,7 +454,7 @@ map.on("click", function(e) {
             closeOnClick: true
         })
         .setLngLat(feature.geometry.coordinates)
-        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + "</br>" + EvntDate.toLocaleString() + "</a></span>")
+        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title+ EvntDate.toLocaleString() +" (more on USGS website)" + "</a>" + "</br>" +  "<b>Epicenter:  </b>" + "</br>" + feature.geometry.coordinates + "</span>")
         .addTo(map);
 });
 
