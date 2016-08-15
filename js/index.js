@@ -267,9 +267,9 @@ map.on("style.load", function() {
                 ["<", "mag", mag + 1]
             ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.7),
-                "circle-color": "#F276E4",
-                "circle-opacity": 0.9
+                "circle-radius": Math.pow(mag, 2.5),
+                "circle-color": "#333",
+                "circle-opacity": 0.3
             }
         });
 
@@ -283,9 +283,9 @@ map.on("style.load", function() {
                 ["<", "mag", mag + 1]
             ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.7),
-                "circle-color": "#ff9933",
-                "circle-opacity": 0.9
+                "circle-radius": Math.pow(mag, 2.5),
+                "circle-color": "#F276E4",
+                "circle-opacity": 0.8
             }
         });
     }
@@ -439,7 +439,7 @@ map.on("style.load", function() {
 
 map.on("click", function(e) {
     var features = map.queryRenderedFeatures(e.point, {
-        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
+        layers: ["quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10","quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
     });
 
     if (!features.length) {
@@ -454,7 +454,7 @@ map.on("click", function(e) {
             closeOnClick: true
         })
         .setLngLat(feature.geometry.coordinates)
-        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title+ EvntDate.toLocaleString() +" (more on USGS website)" + "</a>" + "</br>" +  "<b>Epicenter:  </b>" + "</br>" + feature.geometry.coordinates + "</span>")
+        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + " on " + EvntDate.toLocaleString() +" (click to learn more at USGS)" + "</a>" + "</br>" +  "<b>Epicenter Coordinates:  </b>" + "</br>" + feature.geometry.coordinates[1].toFixed(5) + ", " + feature.geometry.coordinates[0].toFixed(5)  + "</span>")
         .addTo(map);
 });
 
