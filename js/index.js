@@ -18,7 +18,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
             //style: "mapbox://styles/natcatmodeling/cin69vk490028b5m4jbsij3ks", //stylesheet location
             style: form.styleSelect.value,
             center: [-122.419, 37.7749], // starting position
-            zoom: 9, // starting zoom
+            zoom: 6, // starting zoom
             maxBounds: bounds // Sets bounds as max
         });
     }
