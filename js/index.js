@@ -25,7 +25,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
 
   // Append data attribution
   var credit = document.createElement('a');
-  credit.href = 'http://earthquake.usgs.gov';
+  credit.href = 'https://earthquake.usgs.gov';
   credit.className = 'fill-darken2 pad0x inline fr color-white';
   credit.target = '_target';
   credit.textContent = 'Data from USGS';
@@ -130,13 +130,13 @@ var popup = new mapboxgl.Popup({
 });
 
 //define USGS data feed source
-var url = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson";
+var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson";
 var source = new mapboxgl.GeoJSONSource({
     data: url
 });
 
 // past hr Events
-var url_Hr = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson";
+var url_Hr = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson";
 var source_Hr = new mapboxgl.GeoJSONSource({
     data: url_Hr
 });
