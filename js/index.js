@@ -404,7 +404,7 @@ map.on("style.load", function() {
             "features": [],
             "properties": {
                 "title": "Address",
-                "marker-symbol": "star-15",
+                "marker-symbol": "marker-15",
                 "marker-size": "large",
                 "marker-color": "#0000FF"
             }
@@ -416,9 +416,9 @@ map.on("style.load", function() {
         "type": "symbol",
         "source": "markers",
         "layout": {
-            "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
+            "icon-image": "marker-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
             "icon-size": 1.6,
-            "text-field": "Your Location",
+            "text-field": "Searched Location",
             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
             "text-size": 18,
             "text-offset": [0, 1.2],
