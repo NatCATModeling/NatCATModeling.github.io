@@ -557,7 +557,7 @@ map.on('load', function() {
         source: 'geojson',
         paint: {
             'circle-radius': 5,
-            'circle-color': '#000'
+            'circle-color': '#00FF00'
         },
         filter: ['in', '$type', 'Point']
     });
@@ -570,8 +570,9 @@ map.on('load', function() {
             'line-join': 'round'
         },
         paint: {
-            'line-color': '#000',
-            'line-width': 2.5
+            'line-color': '#888',
+            'line-dasharray': [0, 2],
+            'line-width': 3.5
         },
         filter: ['in', '$type', 'LineString']
     });
@@ -593,6 +594,9 @@ map.on('load', function() {
                 return point.properties.id !== id;
             });
         } else {
+            if (geojson.features.length ==2) {
+                geojson.features.pop();  // remove the previous point if there is already two points
+            }           
             var point = {
                 "type": "Feature",
                 "geometry": {
@@ -610,9 +614,12 @@ map.on('load', function() {
             geojson.features.push(point);
         }
 
-        if (geojson.features.length > 1) {
+        if (geojson.features.length ==2) {
+
             linestring.geometry.coordinates = geojson.features.map(function(point) {
+                console.log(point.geometry.coordinates);
                 return point.geometry.coordinates;
+                
             });
 
             geojson.features.push(linestring);
