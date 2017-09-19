@@ -12,19 +12,22 @@
 
     .distance-container {
         position: absolute;
-        top: 0;
-        left: 50%;
+        bottom: 5%;
+        margin-bottom: 5px;
+        left: 5%;
         z-index: 1;
     }
     
     .distance-container > * {
         background-color: rgba(0, 0, 0, 0.5);
-        color: #fff;
-        font-size: 11px;
-        line-height: 18px;
+        color: #fff; 
+        font-size: 12px;
+        font-family: verdana;
+        font-weight: bold;
+        line-height: 12px;
         display: block;
         margin: 0;
-        padding: 5px 10px;
+        padding: 10px;
         border-radius: 3px;
     }
 
@@ -37,8 +40,8 @@
     }
 
     #geocoder-container > div {
-        min-width: 25%;
-        margin-left: 8%;
+        min-width: 10%;
+        margin-left: 5%;
     }
 
     ul {
@@ -82,8 +85,8 @@
 
     #legend {
         position: absolute;
-        top: 65%;
-        left: 5%;
+        bottom: 5%;
+        right: 5%;
         width: 250px;
         z-index: 1;
         background: rgba(255, 255, 255, 0.75);
@@ -94,12 +97,12 @@
         background: #fff;
         position: absolute;
         z-index: 9;
-        top: 8%;
+        top: 7%;
         right: 2%;
         border-radius: 2px;
-        width: 155px;
+        width: 150px;
         border: 1px solid rgba(0, 0, 0, 0.2);
-        font: 11px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font: 10px/15px 'Helvetica Neue', Arial, Helvetica, sans-serif;
         opacity: 0.75;
     }
 
@@ -141,14 +144,15 @@
     #features {
         position: absolute;
         bottom: 0;
-        left: 5%;
+        left: 3%;
         overflow: visible;
         font-size: 12px;
         font-family: verdana;
         font-weight: bold;
         color: navy;
+        line-height: 12px;
         background: rgba(255, 255, 255, 0.5);
-        padding: 1px;
+        padding: 10px;
     }
 
     .help-tip {

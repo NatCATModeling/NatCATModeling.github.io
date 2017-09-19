@@ -556,7 +556,7 @@ map.on('load', function() {
         type: 'circle',
         source: 'geojson',
         paint: {
-            'circle-radius': 5,
+            'circle-radius': 6,
             'circle-color': '#00FF00'
         },
         filter: ['in', '$type', 'Point']
@@ -570,9 +570,9 @@ map.on('load', function() {
             'line-join': 'round'
         },
         paint: {
-            'line-color': '#888',
+            'line-color': '#1F07FC',
             'line-dasharray': [0, 2],
-            'line-width': 3.5
+            'line-width': 5.5
         },
         filter: ['in', '$type', 'LineString']
     });
@@ -617,7 +617,7 @@ map.on('load', function() {
         if (geojson.features.length ==2) {
 
             linestring.geometry.coordinates = geojson.features.map(function(point) {
-                console.log(point.geometry.coordinates);
+               //console.log(point.geometry.coordinates);
                 return point.geometry.coordinates;
                 
             });
