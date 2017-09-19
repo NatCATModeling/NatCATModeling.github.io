@@ -169,9 +169,44 @@ var flag =0;
 // After the map style has loaded on the page, add a source layer and default
 // styling for a single point.
 map.on("style.load", function() {
+
+    //measure distance layer
+    map.addSource('geojson', {
+        "type": "geojson",
+        "data": geojson
+    });
+
+    // Add distance measure styles to the map
+    map.addLayer({
+        id: 'measure-points',
+        type: 'circle',
+        source: 'geojson',
+        paint: {
+            'circle-radius': 8,
+            'circle-color': '#00FF00'
+        },
+        filter: ['in', '$type', 'Point']
+    });
+    map.addLayer({
+        id: 'measure-lines',
+        type: 'line',
+        source: 'geojson',
+        layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+        },
+        paint: {
+            'line-color': '#4F5AF5',
+            'line-dasharray': [0, 2],
+            'line-width': 5.5
+        },
+        filter: ['in', '$type', 'LineString']
+    });
+
+    //count to initate
     flag = flag + 1;
 
-    // add teh soil liquefaction layers
+    // add the soil liquefaction layers
     map.addSource('liquefaction', {
         type: 'vector',
         url: 'mapbox://natcatmodeling.20u13bk5'
@@ -455,128 +490,98 @@ map.on("style.load", function() {
 
 });
 
-map.on("click", function(e) {
-    var features = map.queryRenderedFeatures(e.point, {
-        layers: ["quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10","quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
-    });
 
-    if (!features.length) {
-        return;
-    }
-
-    var feature = features[0];
-    var EvntDate = new Date(feature.properties.time);
-
-    var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: true
-        })
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + " on " + EvntDate.toLocaleString() +" (click to learn more at USGS)" + "</a>" + "</br>" +  "<b>Epicenter Coordinates:  </b>" + "</br>" + feature.geometry.coordinates[1].toFixed(5) + ", " + feature.geometry.coordinates[0].toFixed(5)  + "</span>")
-        .addTo(map);
-});
-
-
-map.on("mousemove", function(e) {
-    // show Lat/lon & Liqueafaction info in the Tex Box
-    var liqueInfo = map.queryRenderedFeatures(e.point, {
-        layers: ["liqueVH", "liqueH", "liqueM", "liqueL", "liqueVL"]
-    });
-
-    // show Liqu + Lat/lon in the Text Box
-    if (liqueInfo.length) {
-        var liq = "";
-            switch ( liqueInfo[0].properties.LIQ) {
-                case "VH":
-                    liq = "Very High";
-                    break;
-                case "H":
-                    liq = "High";
-                    break;
-                case "M":
-                    liq = "Medium";
-                    break;
-                case "L":
-                    liq = "Low";
-                    break;
-                case "VL":
-                    liq= "Very Low";
-                    break;
-                default:
-                    liq = "NA (no data)";
-                    break;
-            }
-        document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:  " + liq + "<br> Long: " + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
-    } else {
-        // show only Lat/lon in the Text Box
-        document.getElementById("features").innerHTML = JSON.stringify("Long:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
-    }
-
-    // change mouse pointer when close to Quake event circles
-    var features = map.queryRenderedFeatures(e.point, {
-
-        layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
-    });
-    map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
-
-    // fault line name popup
-    features = map.queryRenderedFeatures(e.point, {
-        radius: 5,
-        layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
-    });
-
-    if (features.length) {
-        // Populate the popup and set its coordinates based on the feature found.
-        popup.setLngLat(e.lngLat)
-            //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
-            .setHTML("<span style='color:cyan;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL.replace("geohazards.","earthquake.") + "' target='_blank'>" + features[0].properties.name + " </a>" + "</span>")
-            .addTo(map);
-
-        // hightlighted fault segment
-        map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
-    } else {
-        map.setFilter("USGSfaults-hover", ["==", "name", ""]);
-    }
-
-    // UI indicator for clicking/hovering a point on the map to measure distance
-    var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
-    //map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
-});
 
 //measure distance
 map.on('load', function() {
-    map.addSource('geojson', {
-        "type": "geojson",
-        "data": geojson
+    map.on("click", function(e) {
+        var features = map.queryRenderedFeatures(e.point, {
+            layers: ["quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10","quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
+        });
+    
+        if (!features.length) {
+            return;
+        }
+    
+        var feature = features[0];
+        var EvntDate = new Date(feature.properties.time);
+    
+        var popup = new mapboxgl.Popup({
+                closeButton: true,
+                closeOnClick: true
+            })
+            .setLngLat(feature.geometry.coordinates)
+            .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + " on " + EvntDate.toLocaleString() +" (click to learn more at USGS)" + "</a>" + "</br>" +  "<b>Epicenter Coordinates:  </b>" + "</br>" + feature.geometry.coordinates[1].toFixed(5) + ", " + feature.geometry.coordinates[0].toFixed(5)  + "</span>")
+            .addTo(map);
     });
-
-    // Add styles to the map
-    map.addLayer({
-        id: 'measure-points',
-        type: 'circle',
-        source: 'geojson',
-        paint: {
-            'circle-radius': 6,
-            'circle-color': '#00FF00'
-        },
-        filter: ['in', '$type', 'Point']
+    
+    map.on("mousemove", function(e) {
+        // show Lat/lon & Liqueafaction info in the Tex Box
+        var liqueInfo = map.queryRenderedFeatures(e.point, {
+            layers: ["liqueVH", "liqueH", "liqueM", "liqueL", "liqueVL"]
+        });
+    
+        // show Liqu + Lat/lon in the Text Box
+        if (liqueInfo.length) {
+            var liq = "";
+                switch ( liqueInfo[0].properties.LIQ) {
+                    case "VH":
+                        liq = "Very High";
+                        break;
+                    case "H":
+                        liq = "High";
+                        break;
+                    case "M":
+                        liq = "Medium";
+                        break;
+                    case "L":
+                        liq = "Low";
+                        break;
+                    case "VL":
+                        liq= "Very Low";
+                        break;
+                    default:
+                        liq = "NA (no data)";
+                        break;
+                }
+            document.getElementById("features").innerHTML = JSON.stringify("Liqueafaction Susceptibility:  " + liq + "<br> Long: " + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        } else {
+            // show only Lat/lon in the Text Box
+            document.getElementById("features").innerHTML = JSON.stringify("Long:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
+        }
+    
+        // change mouse pointer when close to Quake event circles
+        var features = map.queryRenderedFeatures(e.point, {
+    
+            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
+        });
+        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
+    
+        // fault line name popup
+        features = map.queryRenderedFeatures(e.point, {
+            radius: 5,
+            layers: ["USGSfaults-1", "USGSfaults-2", "USGSfaults-3", "USGSfaults-4"]
+        });
+    
+        if (features.length) {
+            // Populate the popup and set its coordinates based on the feature found.
+            popup.setLngLat(e.lngLat)
+                //.setHTML("<strong>Highlighted Fault Line(s):</br><hr>" + features[0].properties.name, null, 2 + "</strong>")
+                .setHTML("<span style='color:cyan;font-weight:bold;font-size: 12pt' >" + "<a href ='" + features[0].properties.CFM_URL.replace("geohazards.","earthquake.") + "' target='_blank'>" + features[0].properties.name + " </a>" + "</span>")
+                .addTo(map);
+    
+            // hightlighted fault segment
+            map.setFilter("USGSfaults-hover", ["==", "name", features[0].properties.name]);
+        } else {
+            map.setFilter("USGSfaults-hover", ["==", "name", ""]);
+        }
+    
+        // UI indicator for clicking/hovering a point on the map to measure distance
+        var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
+        //map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
     });
-    map.addLayer({
-        id: 'measure-lines',
-        type: 'line',
-        source: 'geojson',
-        layout: {
-            'line-cap': 'round',
-            'line-join': 'round'
-        },
-        paint: {
-            'line-color': '#1F07FC',
-            'line-dasharray': [0, 2],
-            'line-width': 5.5
-        },
-        filter: ['in', '$type', 'LineString']
-    });
-
+    
+    //measure distance
     map.on('click', function(e) {
         var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
 
@@ -626,7 +631,7 @@ map.on('load', function() {
 
             // Populate the distanceContainer with total distance
             var value = document.createElement('pre');
-            value.textContent = 'Distance: ' + turf.lineDistance(linestring, 'miles').toLocaleString() + 'mi';
+            value.textContent = 'Distance: ' + turf.lineDistance(linestring, 'miles').toLocaleString() + ' mi';
             distanceContainer.appendChild(value);
         }
 
