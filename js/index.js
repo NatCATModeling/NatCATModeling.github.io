@@ -8,7 +8,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
 
         // Set map bounda to North America only.
         var bounds = [
-            [-175, 25], // Southwest coordinates
+            [-180, 5], // Southwest coordinates
             [-20, 70] // Northeast coordinates
         ];
 
@@ -320,9 +320,9 @@ map.on("style.load", function() {
                 ["<", "mag", mag + 1]
             ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.5),
+                "circle-radius": Math.pow(mag, 1.6),
                 "circle-color": "#333",
-                "circle-opacity": 0.3
+                "circle-opacity": 0.4
             }
         });
 
