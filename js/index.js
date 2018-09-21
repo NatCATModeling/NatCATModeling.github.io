@@ -18,9 +18,12 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
             //style: "mapbox://styles/natcatmodeling/cin69vk490028b5m4jbsij3ks", //stylesheet location
             style: form.styleSelect.value,
             center: [-122.419, 37.7749], // starting position
-            zoom: 6, // starting zoom
+            zoom: 8, // starting zoom
             maxBounds: bounds // Sets bounds as max
         });
+
+        // disable double click zoom -- reassigned to distance checking
+        map['doubleClickZoom'].disable();
 
         //measure distance
         var distanceContainer = document.getElementById('distance');
@@ -46,7 +49,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
   credit.href = 'https://earthquake.usgs.gov';
   credit.className = 'fill-darken2 pad0x inline fr color-white';
   credit.target = '_target';
-  credit.textContent = 'Data from USGS';
+  credit.textContent = 'Developed by L.Chang. Sources of Data: USGS';
   map.getContainer().querySelector('.mapboxgl-ctrl-bottom-right').appendChild(credit);
 
 function showLocation(position) {
@@ -78,6 +81,7 @@ function errorHandler(err) {
         alert("Error: Position is unavailable!");
     }
 }
+
 
 function getLocation() {
 
@@ -119,56 +123,52 @@ function addLayer(name, id) {
 }
 
 // Add zoom and geo-location, and geocoder controls to the map
-var geocoder = new mapboxgl.Geocoder({
-    position: "top-left",
+var geocoder = new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
     country: "us",
-    type: "postcode,address,region,place,locality,neighborhood,poi",
-    placeholder: "Find an address, ZIP, or Place",
-    container: "geocoder-container",
-    autocomplete: "true",
-    proximity: [-119.4179, 36.7783]
+    bbox: [-123.3,23.87,-60,43.97]
 });
 
-map.addControl(geocoder);
+map.addControl(geocoder, 'top-left');
 
+map.addControl(new mapboxgl.NavigationControl(), 'top-left');
 
-map.addControl(new mapboxgl.Navigation({
-    position: "top-left"
-}));
-
-var geoLocator = new mapboxgl.Geolocate({
-    position: "top-left"
+var geoLocator = new mapboxgl.GeolocateControl({
+    positionOptions: {
+        enableHighAccuracy: true
+    },
+    trackUserLocation: true
 });
 
-map.addControl(geoLocator);
+map.addControl(geoLocator, "top-left");
+
+// add full screen control
+map.addControl(new mapboxgl.FullscreenControl(), 'top-left');
 
 var popup = new mapboxgl.Popup({
-    closeButton: false,
-    closeOnClick: false
+    closeButton: true,
+    closeOnClick: true
 });
+
+// TO DO : Add a list of faults nearby, sort by distance
 
 //define USGS data feed source
 var url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson";
-var source = new mapboxgl.GeoJSONSource({
-    data: url
-});
 
 // past hr Events
 var url_Hr = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_day.geojson";
-var source_Hr = new mapboxgl.GeoJSONSource({
-    data: url_Hr
-});
-
-window.setInterval(function() {
-    source.setData(url);
-   source_Hr.setData(url_Hr);
-}, 900);
 
 var flag =0;
 
 // After the map style has loaded on the page, add a source layer and default
 // styling for a single point.
 map.on("style.load", function() {
+
+    // refreash geojson feed
+    window.setInterval(function () {
+        map.getSource('USGSLiveEvnt').setData(url);
+        map.getSource('USGSLiveEvnt_Hr').setData(url_Hr);
+    }, 900);
 
     //measure distance layer
     map.addSource('geojson', {
@@ -301,26 +301,30 @@ map.on("style.load", function() {
         addLayer('Very Low (VL) Liquefaction', 'liqueVL');
     }
 
-
-
     //add live EQ data
-    map.addSource("USGSLiveEvnt", source);
-    map.addSource("USGSLiveEvnt_Hr", source_Hr);
-    var mags = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    for (var i = 0; i < mags.length; i++) {
-        var mag = mags[i];
+    map.addSource("USGSLiveEvnt", {
+        type: 'geojson',
+        data: url
+    });
+    map.addSource("USGSLiveEvnt_Hr", {
+        type: 'geojson',
+        data: url_Hr
+    });
 
         //past 30 day events
         map.addLayer({
-            "id": "quakes-" + mag,
+            "id": 'quakes',
             "interactive": true,
             "type": "circle",
             "source": "USGSLiveEvnt",
-            "filter": ["all", [">=", "mag", mag],
-                ["<", "mag", mag + 1]
-            ],
             "paint": {
-                "circle-radius": Math.pow(mag, 1.6),
+                "circle-radius": [
+                 'interpolate',
+                 ['linear'],
+                 ['number', ['get', 'mag']],
+                 1, 3,
+                 9, 30
+                ],
                 "circle-color": "#333",
                 "circle-opacity": 0.4
             }
@@ -328,43 +332,29 @@ map.on("style.load", function() {
 
         // past hr events
            map.addLayer({
-            "id": "quakes_Hr" + mag,
+            "id": 'quakesHr',
             "interactive": true,
             "type": "circle",
             "source": "USGSLiveEvnt_Hr",
-            "filter": ["all", [">=", "mag", mag],
-                ["<", "mag", mag + 1]
-            ],
             "paint": {
-                "circle-radius": Math.pow(mag, 2.5),
+                "circle-radius": [
+                    'interpolate',
+                    ['linear'],
+                    ['number', ['get', 'mag']],
+                    1, 3,
+                    9, 30
+                    ],
                 "circle-color": "#F276E4",
-                "circle-opacity": 0.8
+                "circle-opacity": 0.4
             }
         });
-    }
-
+    
     // add custom source from mapbox [use unique MapID]
     map.addSource("mySource", {
         type: "vector",
         url: "mapbox://natcatmodeling.5nvu1zch" //uploaded Shapefile for USGS faults
     });
 
-    // Add a layer to the map"s style. Here, we reference the source we created above and make sure to point to the layer we want within that source"s
-
-    // map.addLayer({
-    //     "id": "USGSfaults",
-    //     "type": "line",
-    //     "source": "mySource",
-    //     "source-layer": "sectionsall",
-    //     "layout": {
-    //         "line-join": "round",
-    //         "line-cap": "round"
-    //     },
-    //     "paint": {
-    //         "line-color": "red",
-    //         "line-width": 2
-    //     }
-    // });
     map.addLayer({
         "id": "USGSfaults-1",
         "type": "line",
@@ -442,7 +432,7 @@ map.on("style.load", function() {
         },
         "paint": {
             "line-color": "blue",
-            "line-width": 3.5
+            "line-width": 4
         },
         "filter": ["==", "name", ""]
     });
@@ -457,7 +447,7 @@ map.on("style.load", function() {
             "features": [],
             "properties": {
                 "title": "Address",
-                "marker-symbol": "marker-15",
+                "marker-symbol": "star-15",
                 "marker-size": "large",
                 "marker-color": "#0000FF"
             }
@@ -469,7 +459,7 @@ map.on("style.load", function() {
         "type": "symbol",
         "source": "markers",
         "layout": {
-            "icon-image": "marker-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
+            "icon-image": "star-15", // see complete list at https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v9/_svg
             "icon-size": 1.6,
             "text-field": "Searched Location",
             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
@@ -490,32 +480,99 @@ map.on("style.load", function() {
 
 });
 
+function updateGeocoderProximity() {
+    // proximity is designed for local scale, if the user is looking at the whole world,
+    // it doesn't make sense to factor in the arbitrary centre of the map
+    if (map.getZoom() > 9) {
+        var center = map.getCenter().wrap(); // ensures the longitude falls within -180 to 180 as the Geocoding API doesn't accept values outside this range
+        geocoder.setProximity({
+            longitude: center.lng,
+            latitude: center.lat
+        });
+    } else {
+        geocoder.setProximity(null);
+    }
+}
 
+map.on('moveend', updateGeocoderProximity); // and then update proximity each time the map moves
 
 //measure distance
 map.on('load', function() {
-    map.on("click", function(e) {
-        var features = map.queryRenderedFeatures(e.point, {
-            layers: ["quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10","quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10"]
-        });
-    
-        if (!features.length) {
-            return;
-        }
-    
-        var feature = features[0];
-        var EvntDate = new Date(feature.properties.time);
-    
-        var popup = new mapboxgl.Popup({
-                closeButton: true,
-                closeOnClick: true
-            })
-            .setLngLat(feature.geometry.coordinates)
-            .setHTML("<span style='color:green;font-weight:bold;font-size: 12pt' > <a href = '" + feature.properties.url + "' target = '_blank'>" + feature.properties.title + " on " + EvntDate.toLocaleString() +" (click to learn more at USGS)" + "</a>" + "</br>" +  "<b>Epicenter Coordinates:  </b>" + "</br>" + feature.geometry.coordinates[1].toFixed(5) + ", " + feature.geometry.coordinates[0].toFixed(5)  + "</span>")
-            .addTo(map);
+
+    updateGeocoderProximity();
+
+    map.on('mouseenter',  'quakes', function (e) {
+           // Change the cursor style as a UI indicator.
+           map.getCanvas().style.cursor = 'pointer';
+                  // change mouse pointer when close to Quake event circles
+                var coordinates = e.features[0].geometry.coordinates.slice();
+            
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                      var EvntDate = new Date(e.features[0].properties.time);
+                      var EvntUpdateDate = new Date(e.features[0].properties.updated);
+                      popup.setLngLat(coordinates)
+                          .setHTML("<span style='color:green;font-weight:bold;font-size: 9pt' > <a href = '" + e.features[0].properties.url + "' target = '_blank'>" +
+                              e.features[0].properties.title 
+                              + " on " +
+                              EvntDate.toLocaleString() + 
+                              " (link to USGS)" + "</a>" + 
+                               "</br>" + 
+                               "<b>Epicenter at </b>" +
+                              e.features[0].geometry.coordinates[1].toFixed(5) + 
+                              ", " + 
+                              e.features[0].geometry.coordinates[0].toFixed(5) + "</span>" +
+                                  " (Updated " + EvntUpdateDate.toLocaleString() + ") "
+                                  )
+                          .addTo(map);
+              
     });
-    
+        map.on('mouseenter', 'quakesHr', function (e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
+            // change mouse pointer when close to Quake event circles
+            var coordinates = e.features[0].geometry.coordinates.slice();
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            var EvntDate = new Date(e.features[0].properties.time);
+            var EvntUpdateDate = new Date(e.features[0].properties.updated);
+            popup.setLngLat(coordinates)
+                .setHTML("<span style='color:green;font-weight:bold;font-size: 9pt' > <a href = '" + e.features[0].properties.url + "' target = '_blank'>" +
+                    e.features[0].properties.title +
+                    " on " +
+                    EvntDate.toLocaleString() +
+                    " (link to USGS)" + "</a>" +
+                    "</br>" +
+                    "<b>Epicenter at </b>" +
+                    e.features[0].geometry.coordinates[1].toFixed(5) +
+                    ", " +
+                    e.features[0].geometry.coordinates[0].toFixed(5) + "</span>" +
+                    " (Updated " + EvntUpdateDate.toLocaleString() + ") "
+                )
+                .addTo(map);
+
+        });
+    map.on('mouseleave', 'quakes', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
+    map.on('mouseleave', 'quakesHr', function () {
+        map.getCanvas().style.cursor = '';
+    });
+
     map.on("mousemove", function(e) {
+
         // show Lat/lon & Liqueafaction info in the Tex Box
         var liqueInfo = map.queryRenderedFeatures(e.point, {
             layers: ["liqueVH", "liqueH", "liqueM", "liqueL", "liqueVL"]
@@ -549,14 +606,8 @@ map.on('load', function() {
             // show only Lat/lon in the Text Box
             document.getElementById("features").innerHTML = JSON.stringify("Long:" + Math.round(e.lngLat.lng * 10000) / 10000 + ", Lat:" + Math.round(e.lngLat.lat * 10000) / 10000);
         }
-    
-        // change mouse pointer when close to Quake event circles
-        var features = map.queryRenderedFeatures(e.point, {
-    
-            layers: ["quakes-0", "quakes-1", "quakes-2", "quakes-3", "quakes-4", "quakes-5", "quakes-6", "quakes-7", "quakes-8", "quakes-9", "quakes-10","quakes_Hr-0", "quakes_Hr-1", "quakes_Hr-2", "quakes_Hr-3", "quakes_Hr-4", "quakes_Hr-5", "quakes_Hr-6", "quakes_Hr-7", "quakes_Hr-8", "quakes_Hr-9", "quakes_Hr-10"]
-        });
-        map.getCanvas().style.cursor = (features.length) ? "pointer" : "";
-    
+
+
         // fault line name popup
         features = map.queryRenderedFeatures(e.point, {
             radius: 5,
@@ -578,11 +629,12 @@ map.on('load', function() {
     
         // UI indicator for clicking/hovering a point on the map to measure distance
         var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
-        //map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';
+        //map.getCanvas().style.cursor = (features.length) ? 'pointer' : 'crosshair';  
+   
     });
     
     //measure distance
-    map.on('click', function(e) {
+    map.on('dblclick', function (e) {
         var features = map.queryRenderedFeatures(e.point, { layers: ['measure-points'] });
 
         // Remove the linestring from the group
@@ -636,11 +688,17 @@ map.on('load', function() {
         }
 
         map.getSource('geojson').setData(geojson);
+
+        
     });
+    
 });
+
 
 // Base Map Selector
 form.styleSelect.addEventListener('change', function() {
     'use strict';
     map.setStyle(form.styleSelect.value);
 });
+
+

@@ -12,38 +12,55 @@
 
     .distance-container {
         position: absolute;
-        bottom: 5%;
+        bottom: 55px;
         margin-bottom: 5px;
         left: 5%;
         z-index: 1;
     }
     
     .distance-container > * {
-        background-color: rgba(0, 0, 0, 0.5);
-        color: #FFFFFF; 
+        background-color: rgba(250, 246, 246, 0.5);
+        color: rgb(206, 12, 12); 
         font-size: 12px;
         font-family: verdana;
         font-weight: bold;
         line-height: 12px;
         display: block;
-        margin: 0;
-        padding: 10px;
+        margin: 1px;
+        padding: 5px;
         border-radius: 3px;
     }
 
-    #geocoder-container {
+    #features {
         position: absolute;
-        top: 0;
-        left: 10%;
-        width: 100%;
-        margin-top: 5px;
+        width: 30%;
+        bottom: 15px;
+        left: 5%;
+        overflow: visible;
+        font-size: 12px;
+        font-family: verdana;
+        font-weight: bold;
+        color: navy;
+        line-height: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        padding: 5px;
     }
 
-    #geocoder-container > div {
-        min-width: 10%;
-        margin-left: 5%;
+    .mapboxgl-ctrl-geocoder {
+        border: 0;
+        border-radius: 0;
+        left: 30%;
+        width: 800px;
+        position: relative;
+        top: 10px;
+        width: 800px;
+        margin-top: 0;
     }
 
+    .mapboxgl-ctrl-geocoder>div {
+        min-width: 100%;
+        margin-left: 10px;
+    }
     ul {
         margin: 0;
         padding: 0;
@@ -141,19 +158,7 @@
         background: #3074a4;
     }
 
-    #features {
-        position: absolute;
-        bottom: 0;
-        left: 3%;
-        overflow: visible;
-        font-size: 12px;
-        font-family: verdana;
-        font-weight: bold;
-        color: navy;
-        line-height: 12px;
-        background: rgba(255, 255, 255, 0.5);
-        padding: 10px;
-    }
+
 
     .help-tip {
         text-align: center;
@@ -283,3 +288,4 @@
     /* Mobile */
 
     @media only screen and (max-width:640px) {}
+

@@ -15,8 +15,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Map box-->
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.21.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css" rel="stylesheet" />
 
     <!-- Heap Analytics -->
     <script type="text/javascript">
@@ -94,8 +94,12 @@
             <label>Very Low</label>
         </nav>
     </div>
-    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.2/mapbox-gl-geocoder.js"></script>
-    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v1.3.2/mapbox-gl-geocoder.css" type="text/css" />
+
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+
+
     <nav id="menu"></nav>
     <div id="map"></div>
 
@@ -106,8 +110,7 @@
 
 
     <pre id="features"></pre>
-    <div id="geocoder-container"></div>
-
+    
     <form id="config">
         <fieldset id="config-fields">
             <div id="header-right-container" class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: rgba(255, 255, 255, 0);">
@@ -130,6 +133,7 @@
 
     <!-- Index javascripts -->
     <script type="text/javascript" src="js/index.js"></script>
+    
 </body>
 
 </html>
