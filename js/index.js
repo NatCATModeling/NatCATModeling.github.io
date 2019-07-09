@@ -18,7 +18,7 @@ mapboxgl.accessToken = "pk.eyJ1IjoibmF0Y2F0bW9kZWxpbmciLCJhIjoiY2lmcHBibmI5NmQ2d
             //style: "mapbox://styles/natcatmodeling/cin69vk490028b5m4jbsij3ks", //stylesheet location
             style: form.styleSelect.value,
             center: [-122.419, 37.7749], // starting position
-            zoom: 8, // starting zoom
+            zoom: 7, // starting zoom
             maxBounds: bounds // Sets bounds as max
         });
 
@@ -125,8 +125,8 @@ function addLayer(name, id) {
 // Add zoom and geo-location, and geocoder controls to the map
 var geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
-    country: "us",
-    bbox: [-123.3,23.87,-60,43.97]
+    countries: "us",
+    bbox: [-128, 31.05,-108.83,49.64]
 });
 
 map.addControl(geocoder, 'top-left');
