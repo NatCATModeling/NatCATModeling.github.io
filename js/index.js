@@ -203,6 +203,27 @@ map.on("style.load", function() {
         filter: ['in', '$type', 'LineString']
     });
 
+//line distance label
+   map.addLayer({
+			"id": "distance-label",
+			"type": "symbol",
+			"source": "geojson",
+			"layout": {
+			  "symbol-placement": "line-center",
+			  "text-font": ["Open Sans Regular"],
+			  "text-size": 18,
+			  "text-offset": [1,1],
+				'text-anchor': 'center',
+				'text-justify': 'center',
+				'icon-allow-overlap': true,
+				'icon-ignore-placement': true
+			},
+			paint: {
+  			  "text-color": '#4F5AF5'
+            }
+		  });
+		  
+		  
     //count to initate
     flag = flag + 1;
 
@@ -683,11 +704,17 @@ map.on('load', function() {
 
             // Populate the distanceContainer with total distance
             var value = document.createElement('pre');
-            value.textContent = 'Distance: ' + turf.lineDistance(linestring, 'miles').toLocaleString() + ' mi';
+            value.textContent = 'Distance: ' + turf.lineDistance(linestring, 'miles').toFixed(1).toLocaleString('fullwide', { useGrouping: false }) + ' mi';
             distanceContainer.appendChild(value);
+			
+						// update line length on the line
+		  map.setLayoutProperty('distance-label',"text-field", 'Distance: ' + turf.lineDistance(linestring, 'miles').toFixed(1).toLocaleString('fullwide', { useGrouping: false }) + ' mi'  );
+
+		  
         }
 
         map.getSource('geojson').setData(geojson);
+
 
         
     });
